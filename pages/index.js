@@ -1,65 +1,71 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import NextLink from 'next/link';
+import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
+
+import { useAuth } from '../lib/auth';
+import Logo from '@/components/Logo';
 
 export default function Home() {
+  const auth = useAuth();
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
+    <Box bg="gray.100" h="100vh">
+      <Flex
+        bg="white"
+        w="full"
+        borderTop="5px solid #0AF5F4"
+        h="75px"
+        px="8"
+        align="center"
+        justify="space-between"
+      >
+        <NextLink href="/">
+          <Logo boxSize="10" />
+        </NextLink>
+        <Box>
+          <NextLink href="/discover">
+            <Button variant="ghost" px={[2, 4]}>
+              Discover
+            </Button>
+          </NextLink>
+          <NextLink href="/">
+            <Button variant="ghost" px={[2, 4]}>
+              Sign In
+            </Button>
+          </NextLink>
+        </Box>
+      </Flex>
+      <Flex
+        direction="column"
+        maxW="750px"
+        margin="0 auto"
+        align="center"
+        textAlign="center"
+        pt="40"
+        px="8"
+      >
+        <Logo boxSize="20" mb="4" />
+        <Heading as="h1" fontWeight="bold" mb="8">
+          Discover local businesses around you right now.
+        </Heading>
+        <Text opacity="0.7" fontSize="lg" mb="4">
+          Project Local helps you discover and find local businesses. View
+          interesting ventures created by fellow Malaysian and filter down to
+          exactly what you're searching for.
+        </Text>
+        {auth.user ? (
+          <Button colorScheme="teal" onClick={() => auth.signout()}>
+            Sign Out
+          </Button>
+        ) : (
+          <Button
+            size="md"
+            colorScheme="teal"
+            isLoading={auth.loading}
+            onClick={() => auth.signinWithGoogle()}
           >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+            Get Started
+          </Button>
+        )}
+      </Flex>
+    </Box>
+  );
 }
