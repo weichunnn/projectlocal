@@ -1,5 +1,5 @@
 import NextLink from 'next/link';
-import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Text, Link } from '@chakra-ui/react';
 
 import { useAuth } from '../lib/auth';
 import Logo from '@/components/Logo';
@@ -11,14 +11,15 @@ export default function Home() {
       <Flex
         bg="white"
         w="full"
-        borderTop="5px solid #0AF5F4"
         h="75px"
         px="8"
         align="center"
         justify="space-between"
       >
-        <NextLink href="/">
-          <Logo boxSize="10" />
+        <NextLink href="/" passHref>
+          <Link>
+            <Logo boxSize="10" />
+          </Link>
         </NextLink>
         <Box>
           <NextLink href="/discover">

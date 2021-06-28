@@ -13,6 +13,7 @@ import {
 import { SearchIcon } from '@chakra-ui/icons';
 
 import Logo from './Logo';
+import { useSearch } from '@/lib/search';
 const useKeyPress = (targets) => {
   let keysPressed = [];
   const [shortcutPressed, setShortcutPressed] = useState(false);
@@ -47,6 +48,8 @@ const useKeyPress = (targets) => {
 export default function Header() {
   const inputRef = useRef();
   const slashPressed = useKeyPress(['Shift', 'K']);
+  const { search, onSearch } = useSearch();
+
   if (slashPressed) {
     inputRef.current.focus();
   }
@@ -75,6 +78,8 @@ export default function Header() {
             placeholder="Search Project Local"
             ref={inputRef}
             autoFocus={slashPressed}
+            onChange={onSearch}
+            value={search}
           />
           <InputRightElement
             width="10rem"
