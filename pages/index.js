@@ -13,21 +13,25 @@ export default function Home() {
         w="full"
         borderTop="5px solid #0AF5F4"
         h="75px"
-        px={8}
+        px="8"
         align="center"
         justify="space-between"
       >
+        <NextLink href="/">
+          <Logo boxSize="10" />
+        </NextLink>
         <Box>
-          <NextLink href="/">
-            <Logo boxSize="10" mr="4" />
-          </NextLink>
           <NextLink href="/discover">
-            <Button variant="ghost">Discover</Button>
+            <Button variant="ghost" px={[2, 4]}>
+              Discover
+            </Button>
+          </NextLink>
+          <NextLink href="/">
+            <Button variant="ghost" px={[2, 4]}>
+              Sign In
+            </Button>
           </NextLink>
         </Box>
-        <NextLink href="/">
-          <Button variant="ghost">Sign In</Button>
-        </NextLink>
       </Flex>
       <Flex
         direction="column"
