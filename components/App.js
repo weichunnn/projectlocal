@@ -1,4 +1,4 @@
-import { Box, SimpleGrid, Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 
 import Header from './Header';
 import SideNav from './SideNav';
@@ -9,7 +9,7 @@ export default function App({ children }) {
       <Header />
       <Flex w="full" minHeight="calc(100vh - 75px)">
         <SideNav />
-        <Box flex="1" bg="green" py="4" px="8">
+        <Box flex="1" py="4" px="8">
           {children}
         </Box>
       </Flex>
