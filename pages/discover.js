@@ -1,20 +1,20 @@
-import { Text, Spinner, Center, Wrap } from '@chakra-ui/react';
+import { Text, Spinner, Center, Box, Wrap, Flex } from '@chakra-ui/react';
 
 import App from '@/components/App';
 import BusinessCard from '@/components/BusinessCard';
 import EmptyState from '@/components/EmptyState';
 
 // Temp Check
-const loading = false;
-const data = false;
+const loading = true;
+const data = true;
 
 export default function Discover() {
   return (
     <App>
       {loading == true ? (
-        <Center h="full" w="full">
+        <Flex mt="48" justify="center">
           <Spinner speed="0.75s" size="xl" />
-        </Center>
+        </Flex>
       ) : (
         <>
           {data ? (
@@ -22,13 +22,17 @@ export default function Discover() {
               <Text mb="2" fontSize="sm" fontWeight="bold">
                 Local businesses around you.
               </Text>
-              <Wrap justify="start" spacing="8">
-                {Array(8)
+              <Wrap justify="center" spacing="8">
+                {Array(3)
                   .fill('')
-                  .map((_, i) => {
+                  .map((_) => {
                     return <BusinessCard />;
                   })}
               </Wrap>
+              <Text mt="4" fontSize="sm" align="right">
+                Showing <b>45</b> out of <b>45</b> businesses in{' '}
+                <b>Kuala Lumpur</b>.
+              </Text>
             </>
           ) : (
             <EmptyState />

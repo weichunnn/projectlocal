@@ -5,14 +5,14 @@ import SideNav from './SideNav';
 
 export default function App({ children }) {
   return (
-    <Box bg="gray.100">
+    <>
       <Header />
-      <Flex w="full" minHeight="calc(100vh - 75px)">
-        <SideNav />
-        <Box flex="1" py="4" px="8">
+      <SideNav />
+      <Box pl="18rem" pt="75px">
+        <Box bg="gray.100" minHeight="calc(100vh - 75px)" py="4" px="8">
           {children}
         </Box>
-      </Flex>
-    </Box>
+      </Box>
+    </>
   );
 }

@@ -56,6 +56,7 @@ export default function Header() {
 
   return (
     <Box
+      pos="fixed"
       w="full"
       h="75px"
       bg="white"

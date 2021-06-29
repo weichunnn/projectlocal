@@ -8,13 +8,7 @@ const property = {
 };
 export default function BusinessCard() {
   return (
-    <Box
-      maxW="xs"
-      borderWidth="1px"
-      borderRadius="xl"
-      borderColor="red"
-      overflow="hidden"
-    >
+    <Box maxW="xs" boxShadow="xl" borderRadius="xl" overflow="hidden">
       <Image
         src={property.imageUrl}
         alt={property.imageAlt}
