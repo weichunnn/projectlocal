@@ -5,6 +5,7 @@ import BusinessCard from '@/components/BusinessCard';
 import EmptyState from '@/components/EmptyState';
 import { getAllBusinesses } from '@/lib/db-admin';
 import searchLogic from 'util/searchLogic';
+import { useSearch } from '@/lib/search';
 
 export async function getStaticProps(context) {
   const { businesses } = await getAllBusinesses();
@@ -18,6 +19,7 @@ export async function getStaticProps(context) {
 }
 
 export default function Discover({ businesses }) {
+  const { location } = useSearch();
   // General Search Logic
   const filteredBusinesses = searchLogic(businesses);
 
@@ -35,8 +37,15 @@ export default function Discover({ businesses }) {
               ))}
             </Wrap>
             <Text mt="4" fontSize="sm" align="right">
-              Showing <b>{businesses.length}</b> out of{' '}
-              <b>{businesses.length}</b> businesses in <b>Kuala Lumpur</b>.
+              Showing <b>{filteredBusinesses.length}</b> out of{' '}
+              <b>
+                {
+                  businesses.filter((business) =>
+                    location.includes(business.location)
+                  ).length
+                }
+              </b>{' '}
+              businesses in <b>{location}</b>.
             </Text>
           </>
         ) : (
