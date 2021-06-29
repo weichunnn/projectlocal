@@ -8,13 +8,16 @@
     "start": "next start"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^1.0.13",
     "@chakra-ui/react": "^1.6.4",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "firebase": "^8.6.8",
+    "firebase-admin": "^9.10.0",
     "framer-motion": "^4",
     "next": "10.x",
     "react": "17.x",
-    "react-dom": "17.x"
+    "react-dom": "17.x",
+    "react-lottie": "^1.2.3"
   }
 }
