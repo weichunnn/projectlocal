@@ -1,39 +1,48 @@
-import { Box, Badge, Image, Stack, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Badge,
+  Image,
+  Stack,
+  Text,
+  Center,
+  Spinner
+} from '@chakra-ui/react';
 
-const property = {
-  imageUrl: 'https://bit.ly/2Z4KKcF',
-  imageAlt: 'Rear view of modern home with pool',
-  title: 'Google',
-  location: 'Kuala Lumpur'
-};
-export default function BusinessCard() {
+export default function BusinessCard({
+  name,
+  categories,
+  shortDesc,
+  location,
+  image
+}) {
   return (
     <Box maxW="xs" boxShadow="xl" borderRadius="xl" overflow="hidden">
       <Image
-        src={property.imageUrl}
-        alt={property.imageAlt}
+        src={image}
+        alt={image}
         w="full"
         maxH="200px"
         fit="fill"
+        fallback={
+          <Center h="full">
+            <Spinner />
+          </Center>
+        }
       />
       <Box py="6" px="4">
         <Stack direction="row" spacing="4">
-          <Badge px="2" colorScheme="teal">
-            New
-          </Badge>
-          <Badge px="2" colorScheme="teal">
-            New
-          </Badge>
+          {categories.map((category) => (
+            <Badge key={category} px="2" colorScheme="teal">
+              {category}
+            </Badge>
+          ))}
         </Stack>
         <Text mt="2" fontWeight="medium" as="h2" fontSize="xl">
-          {property.title}
+          {name}
         </Text>
-        <Text fontWeight="medium" as="h2" fontSize="xs">
-          Location: {property.location}
-        </Text>
-        <Text fontWeight="medium" as="h2" fontSize="sm">
-          nisi vitae suscipit tellus mauris a diam maecenas sed enim ut sem
-          viverra aliquet eget sit amet tellus cras adipiscing enim eu turpis
+        <Text fontSize="xs">Location: {location}</Text>
+        <Text mt="1" fontWeight="normal" fontSize="sm">
+          {shortDesc}
         </Text>
       </Box>
     </Box>

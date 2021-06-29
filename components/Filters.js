@@ -10,8 +10,7 @@ import {
 import { useSearch } from '@/lib/search';
 
 export default function Filters() {
-  const { location, onChangeLocation, categories, onChangeCategories } =
-    useSearch();
+  const { location, onChangeLocation, onChangeCategories } = useSearch();
 
   return (
     <Stack spacing="8" w="full">
@@ -31,6 +30,8 @@ export default function Filters() {
         <Text mb={2} fontWeight="bold">
           Categories
         </Text>
+        {/* Non-serious Known bug on Chakra UI for 'Unable to preventDefault inside
+        passive event listener invocation.' */}
         <CheckboxGroup
           colorScheme="teal"
           defaultValue={['Food & Beverage', 'Health & beauty', 'Education']}

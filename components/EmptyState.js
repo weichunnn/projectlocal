@@ -15,7 +15,7 @@ export default function EmptyState() {
   return (
     <Box align="center">
       <Lottie options={defaultOptions} height={250} width={250} />
-      <Heading size="lg" mb="2">
+      <Heading size="md" mb="2">
         Oh no, we could not find your search.
       </Heading>
       <Text>
