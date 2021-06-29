@@ -1,4 +1,4 @@
-import { Text, Spinner, Center, Box, Wrap, Flex } from '@chakra-ui/react';
+import { Text, Wrap } from '@chakra-ui/react';
 
 import App from '@/components/App';
 import BusinessCard from '@/components/BusinessCard';
