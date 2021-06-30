@@ -27,11 +27,7 @@ export default function BusinessCard({
         w="full"
         maxH="200px"
         fit="fill"
-        fallback={
-          <Center h="full">
-            <Spinner />
-          </Center>
-        }
+        fallback={<Box bg="gray.300" h="full"></Box>}
       />
       <Box py="6" px="4">
         <Stack direction="row" spacing="4">
