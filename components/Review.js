@@ -10,7 +10,7 @@ export default function Review({ author, createdAt, text }) {
       <Text color="gray.500" mb="4" fontSize="xs">
         {format(parseISO(createdAt), 'PPpp')}
       </Text>
-      <Text mb="4" fontSize="sm">
+      <Text mb="4" fontSize="sm" style={{ whiteSpace: 'pre-wrap' }}>
         {text}
       </Text>
       <Divider borderColor="gray" w="85%" margin="auto" />

@@ -17,6 +17,7 @@ import {
 import { FaHeart, FaBookmark } from 'react-icons/fa';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
+
 import useSWR, { mutate } from 'swr';
 import { useForm } from 'react-hook-form';
 
@@ -24,7 +25,13 @@ import Header from '@/components/Header';
 import Carousel from '@/components/Carousel';
 import Review from '@/components/Review';
 import { useAuth } from '@/lib/auth';
-import { createReview } from '@/lib/db';
+import {
+  createReview,
+  createBookmark,
+  createLike,
+  removeBookmark,
+  removeLike
+} from '@/lib/db';
 import { getAllBusinesses, getAllReviews, getBusiness } from '@/lib/db-admin';
 import fetcher from '@/utils/fetcher';
 
@@ -60,17 +67,84 @@ export async function getStaticPaths(context) {
 export default function Business({ business, initialReviews }) {
   const { user } = useAuth();
   const { name, carouselImages, longDesc, link, image, address } = business;
+
   const router = useRouter();
   const { slug } = router.query;
-  const { data } = useSWR(`/api/reviews/${slug}`, fetcher, {
+  const { data: reviewsData } = useSWR(`/api/reviews/${slug}`, fetcher, {
     initialReviews
   });
-  const reviews = data?.reviews;
+  const reviews = reviewsData?.reviews;
+
+  const { data: preferencesData } = useSWR(
+    user ? ['/api/preferences', user.token] : null,
+    fetcher
+  );
+  const bookmarkedBusinessIds = preferencesData?.preferences.bookmarks;
+  const isCurrentPageBookmarked = bookmarkedBusinessIds?.includes(slug);
+  const likedBusinessIds = preferencesData?.preferences.likes;
+  const isCurrentPageliked = likedBusinessIds?.includes(slug);
+
+  const onBookmark = () => {
+    if (isCurrentPageBookmarked) {
+      removeBookmark(user.uid, slug);
+      mutate(
+        ['/api/preferences', user.token],
+        {
+          preferences: {
+            ...preferencesData.preferences,
+            bookmarks: bookmarkedBusinessIds.filter(
+              (businessId) => businessId !== slug
+            )
+          }
+        },
+        false
+      );
+    } else {
+      createBookmark(user.uid, slug);
+      mutate(
+        ['/api/preferences', user.token],
+        {
+          preferences: {
+            ...preferencesData.preferences,
+            bookmarks: [...bookmarkedBusinessIds, slug]
+          }
+        },
+        false
+      );
+    }
+  };
+
+  const onLike = () => {
+    if (isCurrentPageliked) {
+      removeLike(user.uid, slug);
+      mutate(
+        ['/api/preferences', user.token],
+        {
+          preferences: {
+            ...preferencesData.preferences,
+            likes: likedBusinessIds.filter((businessId) => businessId !== slug)
+          }
+        },
+        false
+      );
+    } else {
+      createLike(user.uid, slug);
+      mutate(
+        ['/api/preferences', user.token],
+        {
+          preferences: {
+            ...preferencesData.preferences,
+            likes: [...likedBusinessIds, slug]
+          }
+        },
+        false
+      );
+    }
+  };
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors }
   } = useForm();
 
@@ -121,19 +195,23 @@ export default function Business({ business, initialReviews }) {
               </Flex>
               <Box>
                 <Button
+                  isDisabled={!user}
                   leftIcon={<Icon as={FaHeart} />}
-                  colorScheme="teal"
-                  variant="solid"
+                  colorScheme={isCurrentPageliked ? 'red' : 'teal'}
+                  variant={isCurrentPageliked ? 'solid' : 'outline'}
                   mr="8"
+                  onClick={onLike}
                 >
-                  Like
+                  {isCurrentPageliked ? 'Liked' : 'Like'}
                 </Button>
                 <Button
+                  isDisabled={!user}
                   leftIcon={<Icon as={FaBookmark} />}
                   colorScheme="teal"
-                  variant="outline"
+                  variant={isCurrentPageBookmarked ? 'solid' : 'outline'}
+                  onClick={onBookmark}
                 >
-                  Save
+                  {isCurrentPageBookmarked ? 'Saved' : 'Save'}
                 </Button>
               </Box>
             </Flex>
@@ -168,7 +246,7 @@ export default function Business({ business, initialReviews }) {
                     placeholder="Leave a review"
                     isDisabled={!user}
                     {...register('text', {
-                      required: 'Please write a review before submitting' // JS only: <p>error message</p> TS only support string
+                      required: 'Please write a review before submitting'
                     })}
                   ></Textarea>
                   <Flex justify="flex-end">
