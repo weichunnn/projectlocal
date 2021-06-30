@@ -23,7 +23,6 @@ export default function Carousel(props) {
       <Center bg="gray.100" borderRadius="20">
         <Image
           src={url}
-          w="full"
           h="500px"
           borderRadius="20"
           fallback={
