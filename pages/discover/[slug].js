@@ -10,21 +10,44 @@ import {
   Heading,
   Text,
   Stack,
-  Divider
+  Divider,
+  Link
 } from '@chakra-ui/react';
 import { FaHeart, FaBookmark } from 'react-icons/fa';
-
 import NextLink from 'next/link';
 
 import Header from '@/components/Header';
 import Carousel from '@/components/Carousel';
+import { getAllBusinesses, getBusiness } from '@/lib/db-admin';
 
-export default function Site() {
-  const imageUrls = [
-    'https://firebasestorage.googleapis.com/v0/b/projectlocal-e450c.appspot.com/o/images%2Fcarpe-diem.jpeg?alt=media&token=a7733093-23af-48c4-b8ce-8bfaec574001',
-    'https://firebasestorage.googleapis.com/v0/b/projectlocal-e450c.appspot.com/o/images%2Fcape-diem-2.jpeg?alt=media&token=e2124665-0190-4240-85d4-e49c4403fe7a',
-    'https://firebasestorage.googleapis.com/v0/b/projectlocal-e450c.appspot.com/o/images%2Fcape-diem-3.jpeg?alt=media&token=156319a1-04b4-4714-9bac-c73047ac1fcb'
-  ];
+export async function getStaticProps(context) {
+  const businessId = context.params.slug;
+  const { business } = await getBusiness(businessId);
+
+  return {
+    props: {
+      business: business
+    },
+    revalidate: 3600
+  };
+}
+
+export async function getStaticPaths(context) {
+  const { businesses } = await getAllBusinesses();
+
+  const paths = businesses.map((business) => ({
+    params: {
+      slug: business.id.toString()
+    }
+  }));
+
+  return {
+    paths,
+    fallback: false
+  };
+}
+export default function Business({ business }) {
+  const { name, carouselImages, longDesc, link, image, address } = business;
 
   return (
     <>
@@ -43,17 +66,13 @@ export default function Site() {
               </NextLink>
             </BreadcrumbItem>
             <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink>Cape Diem</BreadcrumbLink>
+              <BreadcrumbLink>{name}</BreadcrumbLink>
             </BreadcrumbItem>
           </Breadcrumb>
           <Flex direction="column">
             <Flex mt="8" align="center" justify="space-between">
               <Flex align="center">
-                <Avatar
-                  mr="8"
-                  size="xl"
-                  src="https://firebasestorage.googleapis.com/v0/b/projectlocal-e450c.appspot.com/o/images%2Fcarpe-diem.jpeg?alt=media&token=a7733093-23af-48c4-b8ce-8bfaec574001"
-                />
+                <Avatar mr="8" size="xl" src={image} />
                 <Heading size="xl">Cape Diem</Heading>
               </Flex>
               <Box>
@@ -75,52 +94,25 @@ export default function Site() {
               </Box>
             </Flex>
             <Box p="12">
-              <Carousel imageUrls={imageUrls} />
+              <Carousel imageUrls={carouselImages} />
             </Box>
             <Box>
               <Heading size="lg">Our Beginning and Story</Heading>
               <Flex align="start" justify="space-between" mt="4">
                 <Text w="65%" align="justify">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Hac habitasse platea dictumst quisque sagittis. Amet mauris
-                  commodo quis imperdiet massa tincidunt. Et netus et malesuada
-                  fames. Nisl condimentum id venenatis a condimentum vitae
-                  sapien. Cursus eget nunc scelerisque viverra mauris in
-                  aliquam. In nibh mauris cursus mattis molestie a. Sed arcu non
-                  odio euismod lacinia at quis risus. Sed adipiscing diam donec
-                  adipiscing tristique risus nec. Tincidunt tortor aliquam nulla
-                  facilisi cras. Sed nisi lacus sed viverra tellus in hac
-                  habitasse. Sociis natoque penatibus et magnis dis parturient
-                  montes. Eget gravida cum sociis natoque penatibus et magnis
-                  dis parturient. Scelerisque purus semper eget duis at. Nisi
-                  porta lorem mollis aliquam. Pharetra et ultrices neque ornare
-                  aenean. Nunc sed augue lacus viverra vitae congue eu consequat
-                  ac. Lacus suspendisse faucibus interdum posuere lorem ipsum
-                  dolor sit amet. In fermentum posuere urna nec tincidunt.
-                  Mauris commodo quis imperdiet massa tincidunt nunc pulvinar
-                  sapien et. Porttitor lacus luctus accumsan tortor posuere ac
-                  ut consequat. Tincidunt tortor aliquam nulla facilisi cras.
-                  Sed nisi lacus sed viverra tellus in hac habitasse. Sociis
-                  natoque penatibus et magnis dis parturient montes. Eget
-                  gravida cum sociis natoque penatibus et magnis dis parturient.
-                  Scelerisque purus semper eget duis at. Nisi porta lorem mollis
-                  aliquam. Pharetra et ultrices neque ornare aenean. Nunc sed
-                  augue lacus viverra vitae congue eu consequat ac. Lacus
-                  suspendisse faucibus interdum posuere lorem ipsum dolor sit
-                  amet. In fermentum posuere urna nec tincidunt. Mauris commodo
-                  quis imperdiet massa tincidunt nunc pulvinar sapien et.
-                  Porttitor lacus luctus accumsan tortor posuere ac ut
-                  consequat.
+                  {longDesc}
                 </Text>
                 <Stack direction="column" w="25%">
-                  <Button colorScheme="teal" variant="solid">
-                    More Info
-                  </Button>
-                  <Text fontSize="sm">
-                    Suite 3-7 685, Menara Oval Damansara, Jalan Damansara, Bukit
-                    Kiara, 60000 Kuala Lumpur, Federal Territory of Kuala Lumpur
-                  </Text>
+                  <Link
+                    style={{ textDecoration: 'none' }}
+                    isExternal
+                    href={link}
+                  >
+                    <Button colorScheme="teal" variant="solid" w="full">
+                      More Info
+                    </Button>
+                  </Link>
+                  <Text fontSize="sm">{address}</Text>
                 </Stack>
               </Flex>
             </Box>
