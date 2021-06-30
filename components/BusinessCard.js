@@ -5,10 +5,14 @@ import {
   Stack,
   Text,
   Center,
-  Spinner
+  Spinner,
+  LinkBox,
+  LinkOverlay
 } from '@chakra-ui/react';
+import NextLink from 'next/link';
 
 export default function BusinessCard({
+  id,
   name,
   categories,
   shortDesc,
@@ -16,7 +20,7 @@ export default function BusinessCard({
   image
 }) {
   return (
-    <Box maxW="xs" boxShadow="xl" borderRadius="xl" overflow="hidden">
+    <LinkBox maxW="xs" boxShadow="xl" borderRadius="xl" overflow="hidden">
       <Image
         src={image}
         alt={image}
@@ -37,14 +41,18 @@ export default function BusinessCard({
             </Badge>
           ))}
         </Stack>
-        <Text mt="2" fontWeight="medium" as="h2" fontSize="xl">
-          {name}
-        </Text>
+        <NextLink href={`/discover/${id}`} passHref>
+          <LinkOverlay>
+            <Text mt="2" fontWeight="medium" as="h2" fontSize="xl">
+              {name}
+            </Text>
+          </LinkOverlay>
+        </NextLink>
         <Text fontSize="xs">Location: {location}</Text>
         <Text mt="1" fontWeight="normal" fontSize="sm">
           {shortDesc}
         </Text>
       </Box>
-    </Box>
+    </LinkBox>
   );
 }

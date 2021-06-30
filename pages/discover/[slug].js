@@ -16,17 +16,17 @@ import {
 } from '@chakra-ui/react';
 import { FaHeart, FaBookmark } from 'react-icons/fa';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import useSWR, { mutate } from 'swr';
 import { useForm } from 'react-hook-form';
 
 import Header from '@/components/Header';
 import Carousel from '@/components/Carousel';
-import { getAllBusinesses, getAllReviews, getBusiness } from '@/lib/db-admin';
-import fetcher from '@/utils/fetcher';
-import { useRouter } from 'next/router';
 import Review from '@/components/Review';
 import { useAuth } from '@/lib/auth';
 import { createReview } from '@/lib/db';
+import { getAllBusinesses, getAllReviews, getBusiness } from '@/lib/db-admin';
+import fetcher from '@/utils/fetcher';
 
 export async function getStaticProps(context) {
   const businessId = context.params.slug;
@@ -70,17 +70,20 @@ export default function Business({ business, initialReviews }) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm();
-  const onSubmit = (form) => {
+
+  const onSubmit = (data, e) => {
     const newReview = {
       author: user.name,
       authorId: user.uid,
       businessId: slug,
       createdAt: new Date().toISOString(),
-      text: form.text
+      text: data.text
     };
     createReview(newReview);
+    e.target.reset();
     mutate(
       `/api/reviews/${slug}`,
       {
@@ -143,7 +146,7 @@ export default function Business({ business, initialReviews }) {
                 <Text w="65%" align="justify">
                   {longDesc}
                 </Text>
-                <Stack direction="column" w="25%">
+                <Stack direction="column" w="25%" spacing="8">
                   <Link
                     style={{ textDecoration: 'none' }}
                     isExternal
