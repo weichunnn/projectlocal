@@ -10,25 +10,35 @@ import {
   Heading,
   Text,
   Stack,
-  Divider,
-  Link
+  Link,
+  FormControl,
+  Textarea
 } from '@chakra-ui/react';
 import { FaHeart, FaBookmark } from 'react-icons/fa';
 import NextLink from 'next/link';
+import useSWR, { mutate } from 'swr';
+import { useForm } from 'react-hook-form';
 
 import Header from '@/components/Header';
 import Carousel from '@/components/Carousel';
-import { getAllBusinesses, getBusiness } from '@/lib/db-admin';
+import { getAllBusinesses, getAllReviews, getBusiness } from '@/lib/db-admin';
+import fetcher from '@/utils/fetcher';
+import { useRouter } from 'next/router';
+import Review from '@/components/Review';
+import { useAuth } from '@/lib/auth';
+import { createReview } from '@/lib/db';
 
 export async function getStaticProps(context) {
   const businessId = context.params.slug;
   const { business } = await getBusiness(businessId);
+  const { reviews } = await getAllReviews(businessId);
 
   return {
     props: {
-      business: business
+      business: business,
+      initialReviews: reviews
     },
-    revalidate: 3600
+    revalidate: 60
   };
 }
 
@@ -46,8 +56,39 @@ export async function getStaticPaths(context) {
     fallback: false
   };
 }
-export default function Business({ business }) {
+
+export default function Business({ business, initialReviews }) {
+  const { user } = useAuth();
   const { name, carouselImages, longDesc, link, image, address } = business;
+  const router = useRouter();
+  const { slug } = router.query;
+  const { data } = useSWR(`/api/reviews/${slug}`, fetcher, {
+    initialReviews
+  });
+  const reviews = data?.reviews;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
+  const onSubmit = (form) => {
+    const newReview = {
+      author: user.name,
+      authorId: user.uid,
+      businessId: slug,
+      createdAt: new Date().toISOString(),
+      text: form.text
+    };
+    createReview(newReview);
+    mutate(
+      `/api/reviews/${slug}`,
+      {
+        reviews: [newReview, ...reviews]
+      },
+      false
+    );
+  };
 
   return (
     <>
@@ -116,25 +157,42 @@ export default function Business({ business }) {
                 </Stack>
               </Flex>
             </Box>
-            <Box mt="8">
+            <Box my="8">
               <Heading size="lg">Comments and Reviews</Heading>
-              <Box w="65%" mt="4">
-                <Flex align="center">
-                  <Heading size="sm" fontWeight="medium">
-                    Jack Septic
-                  </Heading>
-                </Flex>
-                <Text color="gray.500" mb="4" fontSize="xs">
-                  15th January 2018
-                </Text>
-                <Text mb="4" fontSize="sm">
-                  lorem in fermentum posuere urna nec tincidunt. Mauris commodo
-                  quis imperdiet massa tincidunt nunc pulvinar sapien et.
-                  Porttitor lacus luctus accumsan tortor posuere ac ut
-                  consequat.
-                </Text>
-                <Divider borderColor="gray.900" w="75%" m="0 auto" my="6" />
+              <Box my="4" w="65%" as="form" onSubmit={handleSubmit(onSubmit)}>
+                <FormControl>
+                  <Textarea
+                    placeholder="Leave a review"
+                    isDisabled={!user}
+                    {...register('text', {
+                      required: 'Please write a review before submitting' // JS only: <p>error message</p> TS only support string
+                    })}
+                  ></Textarea>
+                  <Flex justify="flex-end">
+                    <Button
+                      mt="4"
+                      px="8"
+                      type="submit"
+                      colorScheme="teal"
+                      _hover={{ bg: 'teal.300' }}
+                      _active={{
+                        bg: 'teal.300',
+                        transform: 'scale(0.95)'
+                      }}
+                    >
+                      Leave Review
+                    </Button>
+                  </Flex>
+                  {errors.text && (
+                    <Text pt="2" color="red.400">
+                      {errors.text.message}
+                    </Text>
+                  )}
+                </FormControl>
               </Box>
+              {reviews?.map((review) => (
+                <Review key={review.id} {...review} />
+              ))}
             </Box>
           </Flex>
         </Box>

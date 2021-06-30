@@ -4,7 +4,7 @@ import App from '@/components/App';
 import BusinessCard from '@/components/BusinessCard';
 import EmptyState from '@/components/EmptyState';
 import { getAllBusinesses } from '@/lib/db-admin';
-import searchLogic from 'util/searchLogic';
+import searchLogic from 'utils/searchLogic';
 import { useSearch } from '@/lib/search';
 
 export async function getStaticProps(context) {
