@@ -123,8 +123,8 @@ export const withAuthModal = (Component) => (props) => {
 
   const onSubmit = (data, _, provider = false) => {
     const signinMethod = provider
-      ? signinWithGoogle('/discover')
-      : signinWithEmail(data.email, data.password, data.name, '/discover');
+      ? signinWithGoogle()
+      : signinWithEmail(data.email, data.password, data.name);
 
     signinMethod
       .then(() => {
@@ -146,6 +146,9 @@ export const withAuthModal = (Component) => (props) => {
           duration: 5000,
           isClosable: true
         });
+      })
+      .then(() => {
+        onClose();
       });
   };
 
