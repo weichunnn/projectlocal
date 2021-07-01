@@ -59,7 +59,7 @@ export default function Header() {
       pos="fixed"
       w="full"
       h="75px"
-      zIndex="9999"
+      zIndex="1000"
       bg="white"
       margin="0 auto"
       px="8"
