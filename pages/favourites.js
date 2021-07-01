@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/auth';
 import fetcher from '@/utils/fetcher';
 import BusinessCard from '@/components/BusinessCard';
 import searchLogic from '@/utils/searchLogic';
-import EmptyState from '@/components/EmptyState';
+import EmptyBookmarks from '@/components/EmptyBookmarks';
 
 export default function Favourites() {
   const { user } = useAuth();
@@ -40,7 +40,7 @@ export default function Favourites() {
               </Wrap>
             </>
           ) : (
-            <EmptyState />
+            <EmptyBookmarks />
           )
         ) : (
           <Center mt="24" w="full">
