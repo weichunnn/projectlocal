@@ -31,6 +31,10 @@ export default function Discover({ initialBusinesses }) {
     typeof data?.businesses == 'undefined' ? [] : data.businesses
   );
 
+  const businessInLocation = businesses?.filter((business) =>
+    location == 'Across Malaysia' ? true : location.includes(business.location)
+  ).length;
+
   return (
     <App>
       <>
@@ -46,15 +50,9 @@ export default function Discover({ initialBusinesses }) {
                 ))}
               </Wrap>
               <Text mt="4" fontSize="sm" align="right">
-                Showing <b>{filteredBusinesses.length}</b> out of{' '}
-                <b>
-                  {
-                    businesses.filter((business) =>
-                      location.includes(business.location)
-                    ).length
-                  }
-                </b>{' '}
-                businesses in <b>{location}</b>.
+                Showing <b>{filteredBusinesses.length}</b> out of&nbsp;
+                <b>{businessInLocation}</b>
+                &nbsp;businesses in <b>{location}</b>.
               </Text>
             </>
           ) : (
