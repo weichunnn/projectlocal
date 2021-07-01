@@ -34,6 +34,7 @@ import {
 } from '@/lib/db';
 import { getAllBusinesses, getAllReviews, getBusiness } from '@/lib/db-admin';
 import fetcher from '@/utils/fetcher';
+import { withAuthModal } from '@/components/AuthModal';
 
 export async function getStaticProps(context) {
   const businessId = context.params.slug;
@@ -64,7 +65,7 @@ export async function getStaticPaths(context) {
   };
 }
 
-export default function Business({ business, initialReviews }) {
+const Business = ({ openAuthModal, business, initialReviews }) => {
   const { user } = useAuth();
   const { name, carouselImages, longDesc, link, image, address } = business;
 
@@ -149,22 +150,26 @@ export default function Business({ business, initialReviews }) {
   } = useForm();
 
   const onSubmit = (data, e) => {
-    const newReview = {
-      author: user.name,
-      authorId: user.uid,
-      businessId: slug,
-      createdAt: new Date().toISOString(),
-      text: data.text
-    };
-    createReview(newReview);
-    e.target.reset();
-    mutate(
-      `/api/reviews/${slug}`,
-      {
-        reviews: [newReview, ...reviews]
-      },
-      false
-    );
+    if (!user) {
+      openAuthModal();
+    } else {
+      const newReview = {
+        author: user.name,
+        authorId: user.uid,
+        businessId: slug,
+        createdAt: new Date().toISOString(),
+        text: data.text
+      };
+      createReview(newReview);
+      e.target.reset();
+      mutate(
+        `/api/reviews/${slug}`,
+        {
+          reviews: [newReview, ...reviews]
+        },
+        false
+      );
+    }
   };
 
   return (
@@ -191,25 +196,23 @@ export default function Business({ business, initialReviews }) {
             <Flex mt="8" align="center" justify="space-between">
               <Flex align="center">
                 <Avatar mr="8" size="xl" src={image} />
-                <Heading size="xl">Cape Diem</Heading>
+                <Heading size="xl">{name}</Heading>
               </Flex>
               <Box>
                 <Button
-                  isDisabled={!user}
                   leftIcon={<Icon as={FaHeart} />}
                   colorScheme={isCurrentPageliked ? 'red' : 'teal'}
                   variant={isCurrentPageliked ? 'solid' : 'outline'}
                   mr="8"
-                  onClick={onLike}
+                  onClick={user ? onLike : openAuthModal}
                 >
                   {isCurrentPageliked ? 'Liked' : 'Like'}
                 </Button>
                 <Button
-                  isDisabled={!user}
                   leftIcon={<Icon as={FaBookmark} />}
                   colorScheme="teal"
                   variant={isCurrentPageBookmarked ? 'solid' : 'outline'}
-                  onClick={onBookmark}
+                  onClick={user ? onBookmark : openAuthModal}
                 >
                   {isCurrentPageBookmarked ? 'Saved' : 'Save'}
                 </Button>
@@ -244,7 +247,6 @@ export default function Business({ business, initialReviews }) {
                 <FormControl>
                   <Textarea
                     placeholder="Leave a review"
-                    isDisabled={!user}
                     {...register('text', {
                       required: 'Please write a review before submitting'
                     })}
@@ -264,7 +266,7 @@ export default function Business({ business, initialReviews }) {
                       Leave Review
                     </Button>
                   </Flex>
-                  {errors.text && (
+                  {user && errors.text && (
                     <Text pt="2" color="red.400">
                       {errors.text.message}
                     </Text>
@@ -280,4 +282,6 @@ export default function Business({ business, initialReviews }) {
       </Box>
     </>
   );
-}
+};
+
+export default withAuthModal(Business);

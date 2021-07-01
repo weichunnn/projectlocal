@@ -3,7 +3,11 @@ import { useSearch } from '@/lib/search';
 export default function searchLogic(businesses) {
   const { search, location, categories } = useSearch();
 
-  const matchesLocation = (business) => location.includes(business.location);
+  const matchesLocation = (business) => {
+    return location == 'Across Malaysia'
+      ? true
+      : location.includes(business.location);
+  };
   const matchesSearch = (business) => {
     return (
       business.shortDesc.toLowerCase().includes(search.toLowerCase()) ||
