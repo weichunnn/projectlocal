@@ -1,11 +1,20 @@
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  Link,
+  Stack
+} from '@chakra-ui/react';
 import NextLink from 'next/link';
-import { Box, Button, Flex, Heading, Text, Link } from '@chakra-ui/react';
 
 import { useAuth } from '../lib/auth';
 import Logo from '@/components/Logo';
+import { withAuthModal } from '@/components/AuthModal';
 
-export default function Home() {
-  const auth = useAuth();
+const Home = ({ openAuthModal }) => {
+  const { user, loading, signout, signinWithGoogle } = useAuth();
   return (
     <Box bg="gray.100" h="100vh">
       <Flex
@@ -21,18 +30,36 @@ export default function Home() {
             <Logo boxSize="10" />
           </Link>
         </NextLink>
-        <Box>
-          <NextLink href="/discover">
-            <Button variant="ghost" px={[2, 4]}>
+        <Stack direction="row" spacing={[2, 12]}>
+          <NextLink href="/discover" passHref>
+            <Button as="a" variant="ghost" px={[2, 4]}>
               Discover
             </Button>
           </NextLink>
-          <NextLink href="/">
-            <Button variant="ghost" px={[2, 4]}>
-              Sign In
+          {user ? (
+            <Button variant="ghost" px={[2, 4]} onClick={() => signout()}>
+              Sign Out
             </Button>
-          </NextLink>
-        </Box>
+          ) : (
+            <>
+              <NextLink href="/" passHref>
+                <Button
+                  as="a"
+                  variant="ghost"
+                  px={[2, 4]}
+                  onClick={openAuthModal}
+                >
+                  Sign In
+                </Button>
+              </NextLink>
+              <NextLink href="/signup" passHref>
+                <Button as="a" variant="solid" colorScheme="teal" px={[2, 4]}>
+                  Sign Up
+                </Button>
+              </NextLink>
+            </>
+          )}
+        </Stack>
       </Flex>
       <Flex
         direction="column"
@@ -52,21 +79,9 @@ export default function Home() {
           interesting ventures created by fellow Malaysian and filter down to
           exactly what you're searching for.
         </Text>
-        {auth.user ? (
-          <Button colorScheme="teal" onClick={() => auth.signout()}>
-            Sign Out
-          </Button>
-        ) : (
-          <Button
-            size="md"
-            colorScheme="teal"
-            isLoading={auth.loading}
-            onClick={() => auth.signinWithGoogle()}
-          >
-            Get Started
-          </Button>
-        )}
       </Flex>
     </Box>
   );
-}
+};
+
+export default withAuthModal(Home);

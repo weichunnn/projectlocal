@@ -1,6 +1,6 @@
 import { Box, Text, Heading } from '@chakra-ui/react';
 import Lottie from 'react-lottie';
-import animationData from '../public/noresults.json';
+import animationData from '../public/static/noresults.json';
 
 export default function EmptyState() {
   const defaultOptions = {

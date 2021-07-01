@@ -11,7 +11,25 @@ import { useSearch } from '@/lib/search';
 
 export default function Filters() {
   const { location, onChangeLocation, onChangeCategories } = useSearch();
-
+  const locationsMalaysia = [
+    'Across Malaysia',
+    'Johor',
+    'Kedah',
+    'Kelantan',
+    'Kuala Lumpur',
+    'Labuan',
+    'Melaka',
+    'Negeri Sembilan',
+    'Pahang',
+    'Penang',
+    'Perak',
+    'Perlis',
+    'Putrajaya',
+    'Sabah',
+    'Sarawak',
+    'Selangor',
+    'Terengganu'
+  ];
   return (
     <Stack spacing="8" w="full">
       <Box>
@@ -23,7 +41,9 @@ export default function Filters() {
           defaultValue={location}
           onChange={onChangeLocation}
         >
-          <option value="Kuala Lumpur">Kuala Lumpur</option>
+          {locationsMalaysia.map((location) => {
+            return <option value={location}>{location}</option>;
+          })}
         </Select>
       </Box>
       <Box>
