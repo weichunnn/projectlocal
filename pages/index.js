@@ -14,7 +14,7 @@ import Logo from '@/components/Logo';
 import { withAuthModal } from '@/components/AuthModal';
 
 const Home = ({ openAuthModal }) => {
-  const auth = useAuth();
+  const { user, loading, signout, signinWithGoogle } = useAuth();
   return (
     <Box bg="gray.100" h="100vh">
       <Flex
@@ -36,16 +36,29 @@ const Home = ({ openAuthModal }) => {
               Discover
             </Button>
           </NextLink>
-          <NextLink href="/" passHref>
-            <Button as="a" variant="ghost" px={[2, 4]} onClick={openAuthModal}>
-              Sign In
+          {user ? (
+            <Button variant="ghost" px={[2, 4]} onClick={() => signout()}>
+              Sign Out
             </Button>
-          </NextLink>
-          <NextLink href="/signup" passHref>
-            <Button as="a" variant="ghost" px={[2, 4]}>
-              Sign Up
-            </Button>
-          </NextLink>
+          ) : (
+            <>
+              <NextLink href="/" passHref>
+                <Button
+                  as="a"
+                  variant="ghost"
+                  px={[2, 4]}
+                  onClick={openAuthModal}
+                >
+                  Sign In
+                </Button>
+              </NextLink>
+              <NextLink href="/signup" passHref>
+                <Button as="a" variant="solid" colorScheme="teal" px={[2, 4]}>
+                  Sign Up
+                </Button>
+              </NextLink>
+            </>
+          )}
         </Stack>
       </Flex>
       <Flex
@@ -66,20 +79,6 @@ const Home = ({ openAuthModal }) => {
           interesting ventures created by fellow Malaysian and filter down to
           exactly what you're searching for.
         </Text>
-        {auth.user ? (
-          <Button colorScheme="teal" onClick={() => auth.signout()}>
-            Sign Out
-          </Button>
-        ) : (
-          <Button
-            size="md"
-            colorScheme="teal"
-            isLoading={auth.loading}
-            onClick={() => auth.signinWithGoogle()}
-          >
-            Get Started
-          </Button>
-        )}
       </Flex>
     </Box>
   );
