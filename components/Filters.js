@@ -10,26 +10,15 @@ import {
 import { useSearch } from '@/lib/search';
 
 export default function Filters() {
-  const { location, onChangeLocation, onChangeCategories } = useSearch();
-  const locationsMalaysia = [
-    'Across Malaysia',
-    'Johor',
-    'Kedah',
-    'Kelantan',
-    'Kuala Lumpur',
-    'Labuan',
-    'Melaka',
-    'Negeri Sembilan',
-    'Pahang',
-    'Penang',
-    'Perak',
-    'Perlis',
-    'Putrajaya',
-    'Sabah',
-    'Sarawak',
-    'Selangor',
-    'Terengganu'
-  ];
+  const {
+    location,
+    onChangeLocation,
+    onChangeCategories,
+    customLocations,
+    customCategories
+  } = useSearch();
+  const allLocations = ['Across Malaysia', ...customLocations];
+
   return (
     <Stack spacing="8" w="full">
       <Box>
@@ -41,8 +30,12 @@ export default function Filters() {
           defaultValue={location}
           onChange={onChangeLocation}
         >
-          {locationsMalaysia.map((location) => {
-            return <option value={location}>{location}</option>;
+          {allLocations.map((location) => {
+            return (
+              <option key={location} value={location}>
+                {location}
+              </option>
+            );
           })}
         </Select>
       </Box>
@@ -54,13 +47,17 @@ export default function Filters() {
         passive event listener invocation.' */}
         <CheckboxGroup
           colorScheme="teal"
-          defaultValue={['Food & Beverage', 'Health & beauty', 'Education']}
+          defaultValue={customCategories}
           onChange={onChangeCategories}
         >
           <Stack direction="column">
-            <Checkbox value="Food & Beverage">Food & Beverage</Checkbox>
-            <Checkbox value="Health & beauty">Health & beauty</Checkbox>
-            <Checkbox value="Education">Education</Checkbox>
+            {customCategories.map((category) => {
+              return (
+                <Checkbox key={category} value={category}>
+                  {category}
+                </Checkbox>
+              );
+            })}
           </Stack>
         </CheckboxGroup>
       </Box>
