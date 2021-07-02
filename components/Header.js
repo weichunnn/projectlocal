@@ -1,58 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
 import NextLink from 'next/link';
-import {
-  Box,
-  Flex,
-  Input,
-  Kbd,
-  InputLeftElement,
-  InputRightElement,
-  InputGroup,
-  Link
-} from '@chakra-ui/react';
-import { SearchIcon } from '@chakra-ui/icons';
+import { Box, Flex, Link, Stack, Button } from '@chakra-ui/react';
 
 import Logo from './Logo';
-import { useSearch } from '@/lib/search';
-const useKeyPress = (targets) => {
-  let keysPressed = [];
-  const [shortcutPressed, setShortcutPressed] = useState(false);
+import SearchBar from '@/components/SearchBar';
+import { useRouter } from 'next/router';
+import { useAuth } from '@/lib/auth';
+import { withAuthModal } from './AuthModal';
 
-  const downHandler = ({ key }) => {
-    keysPressed.push(key);
-    if (targets.every((target) => keysPressed.includes(target))) {
-      setShortcutPressed(true);
-    }
-  };
-
-  const upHandler = ({ key }) => {
-    if (targets.includes(key)) {
-      delete keysPressed[keysPressed.indexOf(key)];
-      setShortcutPressed(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('keydown', downHandler);
-    window.addEventListener('keyup', upHandler);
-
-    return () => {
-      window.removeEventListener('keydown', downHandler);
-      window.removeEventListener('keyup', upHandler);
-    };
-  }, []);
-
-  return shortcutPressed;
-};
-
-export default function Header() {
-  const inputRef = useRef();
-  const slashPressed = useKeyPress(['Shift', 'K']);
-  const { search, onSearch } = useSearch();
-
-  if (slashPressed) {
-    inputRef.current.focus();
-  }
+const Header = ({ openAuthModal }) => {
+  const { user, signout } = useAuth();
+  const router = useRouter();
+  const showSearchBarRoutes = ['/discover', '/favourites'];
+  const showSearchBar = showSearchBarRoutes.includes(router.route);
 
   return (
     <Box
@@ -71,28 +30,47 @@ export default function Header() {
             <Logo boxSize="10" />
           </Link>
         </NextLink>
-        <InputGroup w="full" mx="16">
-          <InputLeftElement
-            children={<SearchIcon color="teal.300" boxSize="4" />}
-          />
-          <Input
-            type="text"
-            placeholder="Search Project Local"
-            ref={inputRef}
-            autoFocus={slashPressed}
-            onChange={onSearch}
-            value={search}
-          />
-          <InputRightElement
-            width="10rem"
-            children={
-              <>
-                <Kbd>shift</Kbd> + <Kbd>K</Kbd>
-              </>
-            }
-          />
-        </InputGroup>
+        {showSearchBar && <SearchBar />}
+        <Stack direction="row" spacing={[2, 12]}>
+          {user ? (
+            <>
+              {router.route != '/discover' && (
+                <NextLink href="/discover" passHref>
+                  <Button as="a" variant="ghost" px={[2, 4]}>
+                    Discover
+                  </Button>
+                </NextLink>
+              )}
+              <NextLink href="/add-business" passHref>
+                <Button as="a" variant="ghost" px={[2, 4]}>
+                  Add a business
+                </Button>
+              </NextLink>
+              <Button variant="ghost" px={[2, 4]} onClick={() => signout()}>
+                Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                as="a"
+                variant="ghost"
+                px={[2, 4]}
+                onClick={openAuthModal}
+              >
+                Sign In
+              </Button>
+              <NextLink href="/signup" passHref>
+                <Button as="a" variant="solid" colorScheme="teal" px={[2, 4]}>
+                  Sign Up
+                </Button>
+              </NextLink>
+            </>
+          )}
+        </Stack>
       </Flex>
     </Box>
   );
-}
+};
+
+export default withAuthModal(Header);

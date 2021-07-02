@@ -20,11 +20,11 @@ const Navigator = ({ href, icon, text, openAuthModal }) => {
       colorScheme="teal"
       variant={currentRoute == href ? 'solid' : 'ghost'}
       onClick={
-        openAuthModal
-          ? openAuthModal
-          : () => {
+        user
+          ? () => {
               router.push(href);
             }
+          : openAuthModal
       }
     >
       {text}
