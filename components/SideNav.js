@@ -44,7 +44,7 @@ const PageLink = ({ openAuthModal }) => {
         openAuthModal={openAuthModal}
       />
       <Navigator
-        href="/view"
+        href="/personal"
         icon={FaUserAlt}
         text="Personal"
         openAuthModal={openAuthModal}
