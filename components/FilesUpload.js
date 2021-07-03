@@ -27,10 +27,11 @@ const FileUpload = ({
   maxFileSizeInBytes = DEFAULT_MAX_FILE_SIZE_IN_BYTES,
   label,
   limitFiles = 10,
+  defaultImages,
+  editable,
   ...otherProps
 }) => {
   const toast = useToast();
-
   const [files, setFiles] = useState({});
 
   const addNewFiles = (newFiles) => {
@@ -118,7 +119,9 @@ const FileUpload = ({
           </Text>
         </Stack>
       </Flex>
-      {Object.keys(files).length != 0 && (
+
+      {(Object.keys(files).length != 0 ||
+        (defaultImages.length && editable)) && (
         <>
           <Box mt="8" mb="4">
             <Text fontWeight="bold">Carousel Image Preview</Text>
@@ -129,6 +132,33 @@ const FileUpload = ({
           </Box>
 
           <Wrap spacing="8">
+            {defaultImages.length && editable
+              ? defaultImages.map((url) => {
+                  return (
+                    <Box pos="relative">
+                      <Image
+                        rounded="xl"
+                        w="250px"
+                        h="150px"
+                        objectFit="cover"
+                        src={url}
+                      />
+                      <IconButton
+                        pos="absolute"
+                        bottom="0"
+                        color="white"
+                        px="4"
+                        mb="2"
+                        right="0"
+                        bg="transparent"
+                        aria-label="Delete Image"
+                        icon={<FaTrash />}
+                        onClick={() => console.log('HAHA')}
+                      />
+                    </Box>
+                  );
+                })
+              : null}
             {Object.keys(files).map((fileName, index) => {
               let file = files[fileName];
               let isImageFile = file.type.split('/')[0] === 'image';
