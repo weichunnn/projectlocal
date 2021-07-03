@@ -1,13 +1,15 @@
 import { Text, Wrap, Center, Spinner } from '@chakra-ui/react';
-import App from '@/components/App';
 import useSWR from 'swr';
-import { useAuth } from '@/lib/auth';
-import fetcher from '@/utils/fetcher';
-import BusinessCard from '@/components/BusinessCard';
-import searchLogic from '@/utils/searchLogic';
-import EmptyBookmarks from '@/components/EmptyBookmarks';
 
-export default function Favourites() {
+import BusinessCard from '@/components/BusinessCard';
+import EmptyBookmarks from '@/components/EmptyBookmarks';
+import PrivateRouteWrapper from '@/components/PrivateRouteWrapper';
+import App from '@/components/App';
+import searchLogic from '@/utils/searchLogic';
+import fetcher from '@/utils/fetcher';
+import { useAuth } from '@/lib/auth';
+
+const Favourites = () => {
   const { user } = useAuth();
   const { data: businessesData } = useSWR('/api/businesses', fetcher);
   const { data: preferencesData } = useSWR(
@@ -50,4 +52,6 @@ export default function Favourites() {
       </>
     </App>
   );
-}
+};
+
+export default PrivateRouteWrapper(Favourites);
