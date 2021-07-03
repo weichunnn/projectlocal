@@ -113,22 +113,24 @@ export default function AddBusiness() {
         ...data,
         createdAt: new Date().toISOString(),
         authorId: user.uid,
+        status: 'pending',
         businessImage: image,
         carouselImages: carouselImages,
         categories: data.categories.map((category) => category['value'])
       };
       createBusiness(businessData)
-        .then(() =>
+        .then(() => {
+          localStorage.removeItem('newBusinessFormData');
           toast({
             title: 'All Saved',
             description:
-              'You had successfully added your business. Please wait while it is pending approval from our team.',
+              'You had successfully added your business. We will get back to you promptly once we vet through it.',
             status: 'success',
             position: 'top-right',
             duration: 7500,
             isClosable: true
-          })
-        )
+          });
+        })
         .catch((error) =>
           toast({
             title: 'Something went wrong somewhere',
