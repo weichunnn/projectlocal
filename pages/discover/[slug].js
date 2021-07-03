@@ -10,11 +10,19 @@ import {
   Heading,
   Text,
   Stack,
-  Link,
   FormControl,
-  Textarea
+  Textarea,
+  Wrap,
+  Link
 } from '@chakra-ui/react';
-import { FaHeart, FaBookmark } from 'react-icons/fa';
+import {
+  FaHeart,
+  FaBookmark,
+  FaWhatsapp,
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn
+} from 'react-icons/fa';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -24,6 +32,8 @@ import { useForm } from 'react-hook-form';
 import Header from '@/components/Header';
 import Carousel from '@/components/Carousel';
 import Review from '@/components/Review';
+import ContactLinkBox from '@/components/ContactLinkBox';
+import { withAuthModal } from '@/components/AuthModal';
 import { useAuth } from '@/lib/auth';
 import {
   createReview,
@@ -34,7 +44,6 @@ import {
 } from '@/lib/db';
 import { getAllBusinesses, getAllReviews, getBusiness } from '@/lib/db-admin';
 import fetcher from '@/utils/fetcher';
-import { withAuthModal } from '@/components/AuthModal';
 
 export async function getStaticProps(context) {
   const businessId = context.params.slug;
@@ -67,7 +76,19 @@ export async function getStaticPaths(context) {
 
 const Business = ({ openAuthModal, business, initialReviews }) => {
   const { user } = useAuth();
-  const { name, carouselImages, longDesc, link, image, address } = business;
+  const {
+    name,
+    carouselImages,
+    story,
+    primaryLink,
+    businessImage,
+    address,
+    contactNumber,
+    facebookLink,
+    instagramLink,
+    linkedinLink,
+    whatsappLink
+  } = business;
 
   const router = useRouter();
   const { slug } = router.query;
@@ -80,10 +101,18 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
     user ? ['/api/preferences', user.token] : null,
     fetcher
   );
+
   const bookmarkedBusinessIds = preferencesData?.preferences.bookmarks;
   const isCurrentPageBookmarked = bookmarkedBusinessIds?.includes(slug);
   const likedBusinessIds = preferencesData?.preferences.likes;
   const isCurrentPageliked = likedBusinessIds?.includes(slug);
+
+  const numberofContactLinks = [
+    facebookLink,
+    instagramLink,
+    linkedinLink,
+    whatsappLink
+  ].filter((link) => link.length).length;
 
   const onBookmark = () => {
     if (isCurrentPageBookmarked) {
@@ -195,7 +224,7 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
           <Flex direction="column">
             <Flex mt="8" align="center" justify="space-between">
               <Flex align="center">
-                <Avatar mr="8" size="xl" src={image} />
+                <Avatar mr="8" size="xl" src={businessImage} />
                 <Heading size="xl">{name}</Heading>
               </Flex>
               <Box>
@@ -225,19 +254,80 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
               <Heading size="lg">Our Beginning and Story</Heading>
               <Flex align="start" justify="space-between" mt="4">
                 <Text w="65%" align="justify">
-                  {longDesc}
+                  {story}
                 </Text>
                 <Stack direction="column" w="25%" spacing="8">
-                  <Link
-                    style={{ textDecoration: 'none' }}
-                    isExternal
-                    href={link}
-                  >
-                    <Button colorScheme="teal" variant="solid" w="full">
-                      More Info
-                    </Button>
-                  </Link>
-                  <Text fontSize="sm">{address}</Text>
+                  {primaryLink && (
+                    <Link
+                      href={primaryLink}
+                      isExternal
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <Button
+                        as="a"
+                        colorScheme="teal"
+                        variant="solid"
+                        w="full"
+                      >
+                        More Info
+                      </Button>
+                    </Link>
+                  )}
+                  {numberofContactLinks && (
+                    <Wrap
+                      align="center"
+                      justify={
+                        numberofContactLinks >= 3
+                          ? 'space-between'
+                          : numberofContactLinks == 2
+                          ? 'center'
+                          : null
+                      }
+                      spacing="8"
+                    >
+                      {whatsappLink && (
+                        <ContactLinkBox
+                          link={whatsappLink}
+                          backgroundColor="#22D266"
+                          icon={FaWhatsapp}
+                        />
+                      )}
+                      {facebookLink && (
+                        <ContactLinkBox
+                          link={facebookLink}
+                          backgroundColor="#3b5998"
+                          icon={FaFacebookF}
+                          color="white"
+                        />
+                      )}
+                      {instagramLink && (
+                        <ContactLinkBox
+                          link={instagramLink}
+                          style={{
+                            background:
+                              'radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%)'
+                          }}
+                          icon={FaInstagram}
+                        />
+                      )}
+                      {linkedinLink && (
+                        <ContactLinkBox
+                          link={linkedinLink}
+                          backgroundColor="#0077B5"
+                          icon={FaLinkedinIn}
+                          color="white"
+                        />
+                      )}
+                    </Wrap>
+                  )}
+                  <Box bg="cyan.200" p="4" fontSize="sm" rounded="xl">
+                    <Text fontWeight="bold">Address</Text>
+                    <Text>{address}</Text>
+                  </Box>
+                  <Box bg="red.200" p="4" fontSize="sm" rounded="xl">
+                    <Text fontWeight="bold">Contact Number</Text>
+                    <Text>{contactNumber}</Text>
+                  </Box>
                 </Stack>
               </Flex>
             </Box>

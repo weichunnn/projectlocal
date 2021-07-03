@@ -16,8 +16,7 @@ import 'swiper/components/navigation/navigation.min.css';
 // install Swiper modules
 SwiperCore.use([Autoplay, Pagination, Navigation, EffectFade]);
 
-export default function Carousel(props) {
-  const { imageUrls } = props;
+export default function Carousel({ imageUrls }) {
   const slides = imageUrls.map((url) => (
     <SwiperSlide key={url}>
       <Center bg="gray.100" borderRadius="20">

@@ -115,7 +115,6 @@ export const AuthModal = ({ isOpen, onClose, onSubmit }) => {
 };
 
 export const withAuthModal = (Component) => (props) => {
-  console.log(props);
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { signinWithEmail, signinWithGoogle } = useAuth();
 
