@@ -24,10 +24,12 @@ import {
   ButtonGroup,
   InputLeftElement,
   FormErrorMessage,
-  Select
+  Select,
+  useToast
 } from '@chakra-ui/react';
 import { EditIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import ReactSelect from 'react-select';
+
 import { useState, useEffect } from 'react';
 import {
   FaHeart,
@@ -47,40 +49,58 @@ import Carousel from '@/components/Carousel';
 import FilesUpload from '@/components/FilesUpload';
 import { useSearch } from '@/lib/search';
 import Header from '@/components/Header';
+import { storeImages } from '@/lib/db';
 
 const DEFAULT_STORY =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id eu nisl nunc mi ipsum faucibus vitae aliquet. Gravida arcu ac tortor dignissim convallis aenean. Facilisis leo vel fringilla est ullamcorper eget nulla facilisi. Et magnis dis parturient montes. In nisl nisi scelerisque eu ultrices vitae auctor eu. Adipiscing elit pellentesque habitant morbi tristique senectus. Facilisi nullam vehicula ipsum a arcu cursus. A diam sollicitudin tempor id eu nisl nunc mi. Ut morbi tincidunt augue interdum velit euismod. Euismod lacinia at quis risus sed vulputate odio ut. Odio aenean sed adipiscing diam donec adipiscing tristique. Sit amet justo donec enim diam vulputate ut pharetra sit.\n\nUt venenatis tellus in metus vulputate eu scelerisque. Viverra mauris in aliquam sem fringilla. Egestas tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla. Quam viverra orci sagittis eu volutpat odio facilisis. Lectus vestibulum mattis ullamcorper velit sed ullamcorper. In ante metus dictum at tempor commodo ullamcorper a lacus. Varius vel pharetra vel turpis nunc eget lorem. Egestas integer eget aliquet nibh praesent. Eget egestas purus viverra accumsan in nisl nisi scelerisque. Nibh tellus molestie nunc non blandit massa enim nec dui. Nisl suscipit adipiscing bibendum est ultricies. Fringilla ut morbi tincidunt augue interdum velit euismod. Tempus urna et pharetra pharetra massa massa. Donec ac odio tempor orci dapibus ultrices in iaculis nunc. Massa eget egestas purus viverra accumsan in. At varius vel pharetra vel turpis nunc eget lorem. In vitae turpis massa sed elementum. Malesuada fames ac turpis egestas. At quis risus sed vulputate odio ut enim blandit. Eleifend mi in nulla posuere sollicitudin aliquam ultrices.\n\nId cursus metus aliquam eleifend. Sagittis vitae et leo duis. Pellentesque habitant morbi tristique senectus et netus et malesuada. Adipiscing vitae proin sagittis nisl rhoncus mattis. Morbi tincidunt ornare massa eget egestas. Nunc sed id semper risus in hendrerit. Lacus luctus accumsan tortor posuere ac. Commodo quis imperdiet massa tincidunt nunc pulvinar sapien. Id faucibus nisl tincidunt eget nullam non nisi est. A condimentum vitae sapien pellentesque habitant morbi tristique senectus. Consectetur a erat nam at lectus.\n\nSem nulla pharetra diam sit amet nisl suscipit. Et pharetra pharetra massa massa ultricies mi quis hendrerit dolor. At varius vel pharetra vel turpis. Mattis molestie a iaculis at erat. Ullamcorper sit amet risus nullam eget felis eget nunc lobortis. Fringilla phasellus faucibus scelerisque eleifend donec. Habitant morbi tristique senectus et netus et. Magna ac placerat vestibulum lectus mauris ultrices eros in cursus. Morbi tempus iaculis urna id volutpat lacus. Dolor sit amet consectetur adipiscing elit duis tristique. Vulputate odio ut enim blandit. Erat velit scelerisque in dictum non consectetur. Nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant Etiam.';
 
-export default function AddBusiness() {
-  const [like, setLike] = useState(false);
-  const [bookmark, setBookmark] = useState(false);
-  const [tempImages, setTempImages] = useState([]);
-  const [image, setImage] = useState('');
-  const [carouselImages, setCarouselImages] = useState([]);
-  const { customLocations } = useSearch();
+function generateRandomNum() {
+  const rand = Math.floor(Math.random() * 1001);
+  console.log('This is the random num:', rand);
+  return rand;
+}
 
-  useEffect(() => {
-    setTempImages(
-      Array(3)
-        .fill('')
-        .map(() => `https://picsum.photos/id/${generateRandomNum()}/400/300`)
-    );
-  }, []);
+function EditableControls() {
+  const {
+    isEditing,
+    getSubmitButtonProps,
+    getCancelButtonProps,
+    getEditButtonProps
+  } = useEditableControls();
+  return (
+    <ButtonGroup
+      px="4"
+      size="md"
+      spacing="4"
+      variant="solid"
+      colorScheme="teal"
+    >
+      {isEditing ? (
+        <>
+          <IconButton
+            borderRadius="xl"
+            icon={<CheckIcon />}
+            {...getSubmitButtonProps()}
+          />
+          <IconButton
+            borderRadius="xl"
+            icon={<CloseIcon />}
+            {...getCancelButtonProps()}
+          />
+        </>
+      ) : (
+        <IconButton
+          borderRadius="xl"
+          icon={<EditIcon />}
+          {...getEditButtonProps()}
+        />
+      )}
+    </ButtonGroup>
+  );
+}
 
-  const onImageInput = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      setImage(URL.createObjectURL(event.target.files[0]));
-    }
-  };
-
-  function generateRandomNum() {
-    const rand = Math.floor(Math.random() * 1001);
-    console.log('This is the random num', rand);
-
-    return rand;
-  }
-
-  const customStyles = {
+const ReactSelectStyles = (errors) => {
+  return {
     control: (styles, state) => ({
       ...styles,
       boxShadow: 'none',
@@ -111,64 +131,83 @@ export default function AddBusiness() {
       }
     })
   };
+};
 
+export default function AddBusiness() {
+  const toast = useToast();
+  const { customLocations, customCategories } = useSearch();
   const {
     handleSubmit,
-    watch,
     register,
     formState: { errors },
-    setValue,
-    control
+    control,
+    reset
   } = useForm();
-  const watchName = watch('name', 'Carpe Diem');
+  const customStyles = ReactSelectStyles(errors);
 
-  const options = [
-    { value: 'food & beverage', label: 'Food & Beverage' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ];
+  var saveState = false;
+  const [like, setLike] = useState(false);
+  const [bookmark, setBookmark] = useState(false);
+  const [tempImages, setTempImages] = useState([]);
+  const [carouselImages, setCarouselImages] = useState([]);
+  const [initialData, setInitialData] = useState({});
+  const [image, setImage] = useState([]);
 
-  function EditableControls() {
-    const {
-      isEditing,
-      getSubmitButtonProps,
-      getCancelButtonProps,
-      getEditButtonProps
-    } = useEditableControls();
-
-    return (
-      <ButtonGroup
-        px="4"
-        size="md"
-        spacing="4"
-        variant="solid"
-        colorScheme="teal"
-      >
-        {isEditing ? (
-          <>
-            <IconButton
-              borderRadius="xl"
-              icon={<CheckIcon />}
-              {...getSubmitButtonProps()}
-            />
-            <IconButton
-              borderRadius="xl"
-              icon={<CloseIcon />}
-              {...getCancelButtonProps()}
-            />
-          </>
-        ) : (
-          <IconButton
-            borderRadius="xl"
-            icon={<EditIcon />}
-            {...getEditButtonProps()}
-          />
-        )}
-      </ButtonGroup>
+  useEffect(() => {
+    setTempImages(
+      Array(3)
+        .fill('')
+        .map(() => `https://picsum.photos/id/${generateRandomNum()}/400/300`)
     );
-  }
-  const onSubmit = (data, e) => {
-    console.log(data);
+    const formData = localStorage.getItem('newBusinessFormData');
+    if (formData) {
+      const parsedData = JSON.parse(formData);
+      setInitialData(parsedData);
+      reset(parsedData);
+    }
+  }, [reset]);
+
+  const onImageInput = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      setImage([event.target.files[0]]);
+    }
+  };
+
+  const onSubmit = async (data, e) => {
+    if (saveState) {
+      const { businessImage, carouselImages, ...otherData } = data;
+      localStorage.setItem('newBusinessFormData', JSON.stringify(otherData));
+      toast({
+        title: 'All Saved',
+        description:
+          "We successfully saved your text data in the browser's local storage. Image files are too big to be saved however.",
+        status: 'success',
+        position: 'top-right',
+        duration: 7500,
+        isClosable: true
+      });
+    } else {
+      const businessData = {
+        ...data,
+        businessImage: image,
+        carouselImages: carouselImages,
+        categories: data.categories.map((category) => category['value'])
+      };
+      await storeImages(
+        'random-id',
+        businessData['name'],
+        businessData['businessImage']
+      ).then((businessImageUrls) => {
+        console.log('Then', businessImageUrls);
+      });
+      await storeImages(
+        'random-id',
+        businessData['name'],
+        businessData['carouselImages']
+      ).then((businessCarouselUrls) => {
+        console.log('Then', businessCarouselUrls);
+      });
+    }
   };
 
   return (
@@ -191,14 +230,37 @@ export default function AddBusiness() {
                 </BreadcrumbItem>
                 <BreadcrumbItem isCurrentPage>
                   <BreadcrumbLink>
-                    {watchName == '' ? 'Carpe Diem' : watchName}
+                    {Object.keys(initialData).length
+                      ? initialData['name']
+                      : 'Carpe Diem'}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
               </Breadcrumb>
             </Box>
-            <Button type="submit" variant="solid" colorScheme="teal" px="12">
-              Submit
-            </Button>
+            <Stack direction="row" spacing="4">
+              <Button
+                type="submit"
+                variant="outline"
+                colorScheme="teal"
+                px="12"
+                onClick={() => {
+                  saveState = true;
+                }}
+              >
+                Save
+              </Button>
+              <Button
+                type="submit"
+                variant="solid"
+                colorScheme="teal"
+                px="12"
+                onClick={() => {
+                  saveState = false;
+                }}
+              >
+                Submit
+              </Button>
+            </Stack>
           </Flex>
           <Flex direction="column">
             <Flex mt="8" align="center" justify="space-between">
@@ -208,14 +270,14 @@ export default function AddBusiness() {
                     bg="teal"
                     mr="8"
                     size="xl"
-                    src={image}
+                    src={image.length ? URL.createObjectURL(image[0]) : null}
                     icon={<Icon color="white" as={FaImage} />}
                   />
                   <VisuallyHidden>
                     <Input
                       id="businessImage"
-                      onInput={onImageInput}
                       type="file"
+                      onInput={onImageInput}
                       {...register('businessImage', {
                         required: 'Business Image is required'
                       })}
@@ -223,38 +285,42 @@ export default function AddBusiness() {
                   </VisuallyHidden>
                 </label>
                 <FormControl isInvalid={errors.name}>
-                  <Editable
-                    placeholder="Carpe Diem"
-                    fontWeight="bold"
-                    fontSize="3xl"
-                    color="gray.500"
-                    isPreviewFocusable={false}
-                    onSubmit={(value) => {
-                      setValue('name', value);
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: 'Business name is required'
                     }}
-                  >
-                    <Stack direction="row" align="center">
-                      <VisuallyHidden>
-                        // Prevent uneccessary rebuilds
-                        <Input
-                          opacity="1"
-                          {...register('name', {
-                            required: 'Name is required'
-                          })}
-                        />
-                      </VisuallyHidden>
-                      <EditablePreview px="4" />
-                      <EditableInput px="4" />
-                      <Flex align="center">
-                        <EditableControls />
-                      </Flex>
-                      {errors.name && (
-                        <FormErrorMessage fontWeight="normal">
-                          {errors.name.message}
-                        </FormErrorMessage>
-                      )}
-                    </Stack>
-                  </Editable>
+                    name="name"
+                    render={({ field }) => (
+                      <Editable
+                        {...field}
+                        onSubmit={(value) =>
+                          setInitialData({
+                            ...initialData,
+                            name: value
+                          })
+                        }
+                        placeholder="Carpe Diem"
+                        fontWeight="bold"
+                        fontSize="3xl"
+                        color="gray.500"
+                        isPreviewFocusable={false}
+                      >
+                        <Stack direction="row" align="center">
+                          <EditablePreview px="4" />
+                          <EditableInput px="4" />
+                          <Flex align="center">
+                            <EditableControls />
+                          </Flex>
+                          {errors.name && (
+                            <FormErrorMessage fontWeight="normal">
+                              {errors.name.message}
+                            </FormErrorMessage>
+                          )}
+                        </Stack>
+                      </Editable>
+                    )}
+                  />
                 </FormControl>
               </Flex>
               <Box>
@@ -330,28 +396,26 @@ export default function AddBusiness() {
                       Category
                     </Text>
                     <Controller
+                      name="categories"
                       control={control}
                       rules={{
                         required:
                           'Please specify the category or categories of your business.'
                       }}
-                      name="categories"
                       render={({ field }) => (
                         <ReactSelect
+                          {...field}
                           instanceId="_"
                           styles={customStyles}
-                          isMulti
                           closeMenuOnSelect={false}
-                          options={options}
+                          isClearable
+                          isMulti
                           noOptionsMessage={() =>
                             "Can't find your categories? Shoot us an email to get it added ! "
                           }
-                          onChange={(selectedOptions) => {
-                            const optionsArray = selectedOptions.map(
-                              (option) => option.value
-                            );
-                            field.onChange(optionsArray);
-                          }}
+                          options={customCategories.map((category) => {
+                            return { value: category, label: category };
+                          })}
                         />
                       )}
                     />
