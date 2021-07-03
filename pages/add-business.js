@@ -49,12 +49,14 @@ import Header from '@/components/Header';
 import { createBusiness } from '@/lib/db';
 import generateRandomNum from '@/utils/randomNum';
 import ReactSelectStyles from '@/styles/reactSelectStyles';
+import { useAuth } from '@/lib/auth';
 
 const DEFAULT_STORY =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id eu nisl nunc mi ipsum faucibus vitae aliquet. Gravida arcu ac tortor dignissim convallis aenean. Facilisis leo vel fringilla est ullamcorper eget nulla facilisi. Et magnis dis parturient montes. In nisl nisi scelerisque eu ultrices vitae auctor eu. Adipiscing elit pellentesque habitant morbi tristique senectus. Facilisi nullam vehicula ipsum a arcu cursus. A diam sollicitudin tempor id eu nisl nunc mi. Ut morbi tincidunt augue interdum velit euismod. Euismod lacinia at quis risus sed vulputate odio ut. Odio aenean sed adipiscing diam donec adipiscing tristique. Sit amet justo donec enim diam vulputate ut pharetra sit.\n\nUt venenatis tellus in metus vulputate eu scelerisque. Viverra mauris in aliquam sem fringilla. Egestas tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla. Quam viverra orci sagittis eu volutpat odio facilisis. Lectus vestibulum mattis ullamcorper velit sed ullamcorper. In ante metus dictum at tempor commodo ullamcorper a lacus. Varius vel pharetra vel turpis nunc eget lorem. Egestas integer eget aliquet nibh praesent. Eget egestas purus viverra accumsan in nisl nisi scelerisque. Nibh tellus molestie nunc non blandit massa enim nec dui. Nisl suscipit adipiscing bibendum est ultricies. Fringilla ut morbi tincidunt augue interdum velit euismod. Tempus urna et pharetra pharetra massa massa. Donec ac odio tempor orci dapibus ultrices in iaculis nunc. Massa eget egestas purus viverra accumsan in. At varius vel pharetra vel turpis nunc eget lorem. In vitae turpis massa sed elementum. Malesuada fames ac turpis egestas. At quis risus sed vulputate odio ut enim blandit. Eleifend mi in nulla posuere sollicitudin aliquam ultrices.\n\nId cursus metus aliquam eleifend. Sagittis vitae et leo duis. Pellentesque habitant morbi tristique senectus et netus et malesuada. Adipiscing vitae proin sagittis nisl rhoncus mattis. Morbi tincidunt ornare massa eget egestas. Nunc sed id semper risus in hendrerit. Lacus luctus accumsan tortor posuere ac. Commodo quis imperdiet massa tincidunt nunc pulvinar sapien. Id faucibus nisl tincidunt eget nullam non nisi est. A condimentum vitae sapien pellentesque habitant morbi tristique senectus. Consectetur a erat nam at lectus.\n\nSem nulla pharetra diam sit amet nisl suscipit. Et pharetra pharetra massa massa ultricies mi quis hendrerit dolor. At varius vel pharetra vel turpis. Mattis molestie a iaculis at erat. Ullamcorper sit amet risus nullam eget felis eget nunc lobortis. Fringilla phasellus faucibus scelerisque eleifend donec. Habitant morbi tristique senectus et netus et. Magna ac placerat vestibulum lectus mauris ultrices eros in cursus. Morbi tempus iaculis urna id volutpat lacus. Dolor sit amet consectetur adipiscing elit duis tristique. Vulputate odio ut enim blandit. Erat velit scelerisque in dictum non consectetur. Nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant Etiam.';
 
 export default function AddBusiness() {
   const toast = useToast();
+  const { user } = useAuth();
   const { customLocations, customCategories } = useSearch();
   const {
     handleSubmit,
@@ -109,6 +111,8 @@ export default function AddBusiness() {
     } else {
       const businessData = {
         ...data,
+        createdAt: new Date().toISOString(),
+        authorId: user.uid,
         businessImage: image,
         carouselImages: carouselImages,
         categories: data.categories.map((category) => category['value'])
@@ -354,14 +358,14 @@ export default function AddBusiness() {
                       </FormErrorMessage>
                     )}
                   </FormControl>
-                  <FormControl isInvalid={errors.businessStory}>
+                  <FormControl isInvalid={errors.story}>
                     <Heading mb="2" size="lg">
                       Our Beginning and Story
                     </Heading>
                     <Textarea
                       placeholder={DEFAULT_STORY}
                       rows="25"
-                      {...register('businessStory', {
+                      {...register('story', {
                         required:
                           'A compelling business story will let people know more about you. Try to come out with one or contact us if you need an idea.'
                       })}
@@ -370,9 +374,9 @@ export default function AddBusiness() {
                       Tell us about how you started. We love to know more about
                       you and your story.
                     </FormHelperText>
-                    {errors.businessStory && (
+                    {errors.story && (
                       <FormErrorMessage>
-                        {errors.businessStory.message}
+                        {errors.story.message}
                       </FormErrorMessage>
                     )}
                   </FormControl>
@@ -462,7 +466,7 @@ export default function AddBusiness() {
                           <InputGroup>
                             <InputLeftElement
                               children={
-                                <Icon color="#25D366" as={FaWhatsapp} />
+                                <Icon color="#22D266" as={FaWhatsapp} />
                               }
                             />
                             <Input

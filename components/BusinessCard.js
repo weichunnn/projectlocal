@@ -2,14 +2,18 @@ import {
   Box,
   Badge,
   Image,
-  Stack,
   Text,
-  Center,
-  Spinner,
   LinkBox,
-  LinkOverlay
+  LinkOverlay,
+  Wrap
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
+
+const badgeColors = {
+  'Food & Beverage': 'teal',
+  'Health & Beauty': 'red',
+  Education: 'orange'
+};
 
 export default function BusinessCard({
   id,
@@ -17,26 +21,26 @@ export default function BusinessCard({
   categories,
   shortDesc,
   location,
-  image
+  businessImage
 }) {
   return (
     <LinkBox maxW="xs" boxShadow="xl" borderRadius="xl" overflow="hidden">
       <Image
-        src={image}
-        alt={image}
+        src={businessImage}
+        alt={businessImage}
         w="full"
-        maxH="200px"
-        fit="fill"
+        h="200px"
+        fit="cover"
         fallback={<Box bg="gray.300" h="full"></Box>}
       />
       <Box py="6" px="4">
-        <Stack direction="row" spacing="4">
+        <Wrap direction="row" spacing="2" h="50px">
           {categories.map((category) => (
-            <Badge key={category} px="2" colorScheme="teal">
+            <Badge key={category} px="2" colorScheme={badgeColors[category]}>
               {category}
             </Badge>
           ))}
-        </Stack>
+        </Wrap>
         <NextLink href={`/discover/${id}`} passHref>
           <LinkOverlay>
             <Text mt="2" fontWeight="medium" as="h2" fontSize="xl">
@@ -44,7 +48,9 @@ export default function BusinessCard({
             </Text>
           </LinkOverlay>
         </NextLink>
-        <Text fontSize="xs">Location: {location}</Text>
+        <Text fontSize="xs">
+          <b>Location:</b> {location}
+        </Text>
         <Text mt="1" fontWeight="normal" fontSize="sm">
           {shortDesc}
         </Text>
