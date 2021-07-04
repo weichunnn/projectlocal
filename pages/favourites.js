@@ -32,9 +32,9 @@ const Favourites = () => {
   return (
     <App>
       <>
-        {businessesData ? (
-          bookmarkedBusiness?.length ? (
-            filteredBookmarkedBusinesses?.length ? (
+        {businessesData && preferencesData ? (
+          bookmarkedBusiness.length ? (
+            filteredBookmarkedBusinesses.length ? (
               <>
                 <Text mb="4" fontWeight="bold">
                   Your favourite local businesses (Make sure you tick all the
