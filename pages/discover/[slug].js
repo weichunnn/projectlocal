@@ -11,6 +11,7 @@ import {
   Text,
   Stack,
   FormControl,
+  FormErrorMessage,
   Textarea,
   Wrap,
   Link
@@ -247,13 +248,19 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                 </Button>
               </Box>
             </Flex>
-            <Box p="12">
-              <Carousel imageUrls={carouselImages} />
-            </Box>
-            <Box>
+            {carouselImages.length != 0 && (
+              <Box px="12" mt="12">
+                <Carousel imageUrls={carouselImages} />
+              </Box>
+            )}
+            <Box mt="12">
               <Heading size="lg">Our Beginning and Story</Heading>
               <Flex align="start" justify="space-between" mt="4">
-                <Text w="65%" align="justify">
+                <Text
+                  w="65%"
+                  align="justify"
+                  style={{ whiteSpace: 'pre-wrap' }}
+                >
                   {story}
                 </Text>
                 <Stack direction="column" w="25%" spacing="8">
@@ -263,12 +270,7 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                       isExternal
                       style={{ textDecoration: 'none' }}
                     >
-                      <Button
-                        as="a"
-                        colorScheme="teal"
-                        variant="solid"
-                        w="full"
-                      >
+                      <Button colorScheme="teal" variant="solid" w="full">
                         More Info
                       </Button>
                     </Link>
@@ -320,30 +322,38 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                       )}
                     </Wrap>
                   )}
-                  <Box bg="cyan.200" p="4" fontSize="sm" rounded="xl">
-                    <Text fontWeight="bold">Address</Text>
-                    <Text>{address}</Text>
-                  </Box>
-                  <Box bg="red.200" p="4" fontSize="sm" rounded="xl">
-                    <Text fontWeight="bold">Contact Number</Text>
-                    <Text>{contactNumber}</Text>
-                  </Box>
+                  {address && (
+                    <Box bg="cyan.200" p="4" fontSize="sm" rounded="xl">
+                      <Text fontWeight="bold">Address</Text>
+                      <Text>{address}</Text>
+                    </Box>
+                  )}
+                  {contactNumber && (
+                    <Box bg="red.200" p="4" fontSize="sm" rounded="xl">
+                      <Text fontWeight="bold">Contact Number</Text>
+                      <Text>{contactNumber}</Text>
+                    </Box>
+                  )}
                 </Stack>
               </Flex>
             </Box>
             <Box my="8">
               <Heading size="lg">Comments and Reviews</Heading>
               <Box my="4" w="65%" as="form" onSubmit={handleSubmit(onSubmit)}>
-                <FormControl>
+                <FormControl isInvalid={errors.text}>
                   <Textarea
                     placeholder="Leave a review"
                     {...register('text', {
                       required: 'Please write a review before submitting'
                     })}
-                  ></Textarea>
-                  <Flex justify="flex-end">
+                  />
+                  <Flex mt="4" justify="space-between" align="center">
+                    {errors.text ? (
+                      <FormErrorMessage>{errors.text.message}</FormErrorMessage>
+                    ) : (
+                      <Box></Box>
+                    )}
                     <Button
-                      mt="4"
                       px="8"
                       type="submit"
                       colorScheme="teal"
@@ -356,11 +366,6 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                       Leave Review
                     </Button>
                   </Flex>
-                  {user && errors.text && (
-                    <Text pt="2" color="red.400">
-                      {errors.text.message}
-                    </Text>
-                  )}
                 </FormControl>
               </Box>
               {reviews?.map((review) => (

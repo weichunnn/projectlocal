@@ -7,7 +7,6 @@ import EmptyState from '@/components/EmptyState';
 import LoadingAppState from '@/components/LoadingAppState';
 import { getAllBusinesses } from '@/lib/db-admin';
 import searchLogic from 'utils/searchLogic';
-import { useSearch } from '@/lib/search';
 import useSWR from 'swr';
 import fetcher from '@/utils/fetcher';
 
@@ -23,7 +22,6 @@ export async function getStaticProps(context) {
 }
 
 export default function Discover({ initialBusinesses }) {
-  const { location } = useSearch();
   const { data } = useSWR('/api/businesses', fetcher, {
     initialBusinesses
   });

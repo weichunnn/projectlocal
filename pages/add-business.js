@@ -51,12 +51,16 @@ import { createBusiness } from '@/lib/db';
 import generateRandomNum from '@/utils/randomNum';
 import ReactSelectStyles from '@/styles/reactSelectStyles';
 import { useAuth } from '@/lib/auth';
+import { useRouter } from 'next/router';
 
+const MAX_FILE_SIZE = '5000000';
 const DEFAULT_STORY =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id eu nisl nunc mi ipsum faucibus vitae aliquet. Gravida arcu ac tortor dignissim convallis aenean. Facilisis leo vel fringilla est ullamcorper eget nulla facilisi. Et magnis dis parturient montes. In nisl nisi scelerisque eu ultrices vitae auctor eu. Adipiscing elit pellentesque habitant morbi tristique senectus. Facilisi nullam vehicula ipsum a arcu cursus. A diam sollicitudin tempor id eu nisl nunc mi. Ut morbi tincidunt augue interdum velit euismod. Euismod lacinia at quis risus sed vulputate odio ut. Odio aenean sed adipiscing diam donec adipiscing tristique. Sit amet justo donec enim diam vulputate ut pharetra sit.\n\nUt venenatis tellus in metus vulputate eu scelerisque. Viverra mauris in aliquam sem fringilla. Egestas tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla. Quam viverra orci sagittis eu volutpat odio facilisis. Lectus vestibulum mattis ullamcorper velit sed ullamcorper. In ante metus dictum at tempor commodo ullamcorper a lacus. Varius vel pharetra vel turpis nunc eget lorem. Egestas integer eget aliquet nibh praesent. Eget egestas purus viverra accumsan in nisl nisi scelerisque. Nibh tellus molestie nunc non blandit massa enim nec dui. Nisl suscipit adipiscing bibendum est ultricies. Fringilla ut morbi tincidunt augue interdum velit euismod. Tempus urna et pharetra pharetra massa massa. Donec ac odio tempor orci dapibus ultrices in iaculis nunc. Massa eget egestas purus viverra accumsan in. At varius vel pharetra vel turpis nunc eget lorem. In vitae turpis massa sed elementum. Malesuada fames ac turpis egestas. At quis risus sed vulputate odio ut enim blandit. Eleifend mi in nulla posuere sollicitudin aliquam ultrices.\n\nId cursus metus aliquam eleifend. Sagittis vitae et leo duis. Pellentesque habitant morbi tristique senectus et netus et malesuada. Adipiscing vitae proin sagittis nisl rhoncus mattis. Morbi tincidunt ornare massa eget egestas. Nunc sed id semper risus in hendrerit. Lacus luctus accumsan tortor posuere ac. Commodo quis imperdiet massa tincidunt nunc pulvinar sapien. Id faucibus nisl tincidunt eget nullam non nisi est. A condimentum vitae sapien pellentesque habitant morbi tristique senectus. Consectetur a erat nam at lectus.\n\nSem nulla pharetra diam sit amet nisl suscipit. Et pharetra pharetra massa massa ultricies mi quis hendrerit dolor. At varius vel pharetra vel turpis. Mattis molestie a iaculis at erat. Ullamcorper sit amet risus nullam eget felis eget nunc lobortis. Fringilla phasellus faucibus scelerisque eleifend donec. Habitant morbi tristique senectus et netus et. Magna ac placerat vestibulum lectus mauris ultrices eros in cursus. Morbi tempus iaculis urna id volutpat lacus. Dolor sit amet consectetur adipiscing elit duis tristique. Vulputate odio ut enim blandit. Erat velit scelerisque in dictum non consectetur. Nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant Etiam.';
 
 const AddBusiness = () => {
   const toast = useToast();
+  const router = useRouter();
+
   const { user } = useAuth();
   const { customLocations, customCategories } = useSearch();
   const {
@@ -69,12 +73,13 @@ const AddBusiness = () => {
   const customStyles = ReactSelectStyles(errors);
 
   var saveState = false;
+  const [loading, setLoading] = useState(false);
   const [like, setLike] = useState(false);
   const [bookmark, setBookmark] = useState(false);
   const [tempImages, setTempImages] = useState([]);
   const [carouselImages, setCarouselImages] = useState([]);
   const [initialData, setInitialData] = useState({});
-  const [image, setImage] = useState([]);
+  const [image, setImage] = useState('');
 
   useEffect(() => {
     setTempImages(
@@ -91,25 +96,41 @@ const AddBusiness = () => {
   }, [reset]);
 
   const onImageInput = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      setImage([event.target.files[0]]);
+    const files = event.target.files;
+    if (files && files[0]) {
+      files[0].size < MAX_FILE_SIZE
+        ? setImage(files[0])
+        : toast({
+            title: 'An error occured',
+            description: `File size of ${files[0].name} exceeds 5MB.`,
+            status: 'error',
+            position: 'top-right',
+            duration: 5000,
+            isClosable: true
+          });
     }
   };
 
   const onSubmit = async (data) => {
     if (saveState) {
+      setLoading(true);
       const { businessImage, carouselImages, ...otherData } = data;
       localStorage.setItem('newBusinessFormData', JSON.stringify(otherData));
-      toast({
-        title: 'All Saved',
-        description:
-          "We successfully saved your text data in the browser's local storage. Image files are too big to be saved however.",
-        status: 'success',
-        position: 'top-right',
-        duration: 7500,
-        isClosable: true
-      });
+      if (!toast.isActive('save-toast')) {
+        toast({
+          id: 'save-toast',
+          title: 'All Saved',
+          description:
+            "We successfully saved your text data in the browser's local storage. Image files are too big to be saved however.",
+          status: 'success',
+          position: 'top-right',
+          duration: 5000,
+          isClosable: true
+        });
+      }
+      setLoading(false);
     } else {
+      setLoading(true);
       const businessData = {
         ...data,
         createdAt: new Date().toISOString(),
@@ -131,18 +152,23 @@ const AddBusiness = () => {
             duration: 7500,
             isClosable: true
           });
+          router.replace('/personal');
         })
-        .catch((error) =>
-          toast({
-            title: 'Something went wrong somewhere',
-            description:
-              "Sorry, we didn't manage to save your data. Please try again in a short while.",
-            status: 'error',
-            position: 'top-right',
-            duration: 7500,
-            isClosable: true
-          })
-        );
+        .catch((error) => {
+          if (!toast.isActive('error-toast')) {
+            toast({
+              id: 'error-toast',
+              title: 'Something went wrong somewhere',
+              description:
+                "Sorry, we didn't manage to save your data. Please try again in a short while.",
+              status: 'error',
+              position: 'top-right',
+              duration: 7500,
+              isClosable: true
+            });
+          }
+        })
+        .then(() => setLoading(false));
     }
   };
 
@@ -175,6 +201,7 @@ const AddBusiness = () => {
             </Box>
             <Stack direction="row" spacing="4">
               <Button
+                isLoading={loading}
                 type="submit"
                 variant="outline"
                 colorScheme="teal"
@@ -186,6 +213,7 @@ const AddBusiness = () => {
                 Save
               </Button>
               <Button
+                isLoading={loading}
                 type="submit"
                 variant="solid"
                 colorScheme="teal"
@@ -206,13 +234,14 @@ const AddBusiness = () => {
                     bg="teal"
                     mr="8"
                     size="xl"
-                    src={image.length ? URL.createObjectURL(image[0]) : null}
+                    src={image ? URL.createObjectURL(image) : null}
                     icon={<Icon color="white" as={FaImage} />}
                   />
                   <VisuallyHidden>
                     <Input
                       id="businessImage"
                       type="file"
+                      accept=".jpg,.png,.jpeg"
                       onInput={onImageInput}
                       {...register('businessImage', {
                         required: 'Business Image is required'
@@ -298,7 +327,7 @@ const AddBusiness = () => {
                 <FilesUpload
                   multiple
                   accept=".jpg,.png,.jpeg"
-                  maxFileSizeInBytes="5000000"
+                  maxFileSizeInBytes={MAX_FILE_SIZE}
                   label="Supports PNG, JPG, JPEG up to 5Mb"
                   updateFilesCb={(files) => setCarouselImages(files)}
                 />
@@ -314,7 +343,12 @@ const AddBusiness = () => {
                     <Input
                       placeholder="Project Local aims to bring the community together in supporting local businesses"
                       {...register('shortDesc', {
-                        required: 'Short Description is required.'
+                        required: 'Short Description is required.',
+                        maxLength: {
+                          value: 85,
+                          message:
+                            'A short description should be short! Think about what do you want people to know when they see your short description.'
+                        }
                       })}
                     />
                     <FormHelperText>
@@ -370,7 +404,12 @@ const AddBusiness = () => {
                       rows="25"
                       {...register('story', {
                         required:
-                          'A compelling business story will let people know more about you. Try to come out with one or contact us if you need an idea.'
+                          'A compelling business story will let people know more about you. Try to come out with one or contact us if you need an idea.',
+                        maxLength: {
+                          value: 3250,
+                          message:
+                            'Too many words may not be a concise read for your readers. Try to reduce some words.'
+                        }
                       })}
                     />
                     <FormHelperText>
@@ -437,7 +476,9 @@ const AddBusiness = () => {
                         <Text mb="2">Address</Text>
                         <Textarea
                           placeholder="No. 21, Jalan Projek Lokal, Taman Lokal, 532049 Kuala Lumpur"
-                          {...register('address')}
+                          {...register('address', {
+                            maxLength: 125
+                          })}
                         />
                       </Box>
                       <Box>

@@ -7,6 +7,7 @@ import {
   Text,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   FormHelperText,
   Input,
   Stack,
@@ -99,7 +100,7 @@ export default function Login() {
               <Divider borderColor="gray.500" />
             </Stack>
             <Box as="form" w="full" onSubmit={handleSubmit(onSubmit)}>
-              <FormControl id="name" mb="4">
+              <FormControl id="name" mb="4" isInvalid={errors.name}>
                 <FormLabel>Name</FormLabel>
                 <Input
                   placeholder="John Baker"
@@ -109,12 +110,10 @@ export default function Login() {
                   {...register('name', { required: 'Name is required' })}
                 />
                 {errors.name && (
-                  <Text pt="2" color="red.400">
-                    {errors.name.message}
-                  </Text>
+                  <FormErrorMessage>{errors.name.message}</FormErrorMessage>
                 )}
               </FormControl>
-              <FormControl id="email" mb="4">
+              <FormControl id="email" mb="4" isInvalid={errors.email}>
                 <FormLabel>Email address</FormLabel>
                 <Input
                   w="full"
@@ -131,13 +130,11 @@ export default function Login() {
                 />
                 <FormHelperText>We'll never share your email.</FormHelperText>
                 {errors.email && (
-                  <Text pt="2" color="red.400">
-                    {errors.email.message}
-                  </Text>
+                  <FormErrorMessage>{errors.email.message}</FormErrorMessage>
                 )}
               </FormControl>
               <Stack direction="row" spacing="12" mb="6">
-                <FormControl id="password">
+                <FormControl id="password" isInvalid={errors.password}>
                   <FormLabel>Password</FormLabel>
                   <InputGroup>
                     <Input
@@ -163,27 +160,30 @@ export default function Login() {
                     </InputRightElement>
                   </InputGroup>
                   {errors.password && (
-                    <Text pt="2" color="red.400">
+                    <FormErrorMessage>
                       {errors.password.message}
-                    </Text>
+                    </FormErrorMessage>
                   )}
                 </FormControl>
-                <FormControl id="confirmPassword">
+                <FormControl
+                  id="confirmPassword"
+                  isInvalid={errors.confirmPassword}
+                >
                   <FormLabel>Confirm Password</FormLabel>
                   <Input
                     variant="filled"
                     type="password"
                     placeholder="Re-enter password"
                     {...register('confirmPassword', {
+                      required: 'Password is required',
                       validate: (value) =>
                         value === watchPassword || 'The passwords do not match'
                     })}
                   />
-
                   {errors.confirmPassword && (
-                    <Text pt="2" color="red.400">
+                    <FormErrorMessage>
                       {errors.confirmPassword.message}
-                    </Text>
+                    </FormErrorMessage>
                   )}
                 </FormControl>
               </Stack>
