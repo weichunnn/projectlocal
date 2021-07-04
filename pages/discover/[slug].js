@@ -253,7 +253,11 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
             <Box>
               <Heading size="lg">Our Beginning and Story</Heading>
               <Flex align="start" justify="space-between" mt="4">
-                <Text w="65%" align="justify">
+                <Text
+                  w="65%"
+                  align="justify"
+                  style={{ whiteSpace: 'pre-wrap' }}
+                >
                   {story}
                 </Text>
                 <Stack direction="column" w="25%" spacing="8">
