@@ -74,7 +74,7 @@ const AddBusiness = () => {
   const [tempImages, setTempImages] = useState([]);
   const [carouselImages, setCarouselImages] = useState([]);
   const [initialData, setInitialData] = useState({});
-  const [image, setImage] = useState([]);
+  const [image, setImage] = useState('');
 
   useEffect(() => {
     setTempImages(
@@ -92,7 +92,7 @@ const AddBusiness = () => {
 
   const onImageInput = (event) => {
     if (event.target.files && event.target.files[0]) {
-      setImage([event.target.files[0]]);
+      setImage(event.target.files[0]);
     }
   };
 
@@ -206,7 +206,7 @@ const AddBusiness = () => {
                     bg="teal"
                     mr="8"
                     size="xl"
-                    src={image.length ? URL.createObjectURL(image[0]) : null}
+                    src={image ? URL.createObjectURL(image) : null}
                     icon={<Icon color="white" as={FaImage} />}
                   />
                   <VisuallyHidden>
