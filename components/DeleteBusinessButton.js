@@ -1,14 +1,15 @@
 import {
   Icon,
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+  useDisclosure,
+  useToast
 } from '@chakra-ui/react';
 import { FaTrash } from 'react-icons/fa';
 import { mutate } from 'swr';
@@ -17,6 +18,8 @@ import { deleteBusiness } from '@/lib/db';
 
 export default function DeleteBusinessButton({ businessId, status }) {
   const { user } = useAuth();
+  const toast = useToast();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const onDelete = () => {
     deleteBusiness(businessId);
@@ -47,6 +50,14 @@ export default function DeleteBusinessButton({ businessId, status }) {
       );
     }
     onClose();
+    toast({
+      title: 'Sucess',
+      description: 'Your business has been deleted.',
+      status: 'success',
+      position: 'top-right',
+      duration: 5000,
+      isClosable: true
+    });
   };
 
   return (
@@ -63,23 +74,23 @@ export default function DeleteBusinessButton({ businessId, status }) {
       >
         <Icon as={FaTrash} />
       </Button>
-      <Modal
+      <AlertDialog
         onClose={onClose}
         isOpen={isOpen}
         isCentered
         motionPreset="scale"
         size="xl"
       >
-        <ModalOverlay />
-        <ModalContent bg="red.200">
-          <ModalHeader>Delete Business</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
+        <AlertDialogOverlay />
+        <AlertDialogContent bg="red.200">
+          <AlertDialogHeader>Delete Business</AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <AlertDialogBody>
             Once you delete your business on Project Local, there is no going
             back. Take some time to think about it or let us know if we can help
             in any ways.
-          </ModalBody>
-          <ModalFooter>
+          </AlertDialogBody>
+          <AlertDialogFooter>
             <Button
               mr="4"
               fontWeight="bold"
@@ -89,9 +100,9 @@ export default function DeleteBusinessButton({ businessId, status }) {
               Delete
             </Button>
             <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
