@@ -10,6 +10,7 @@ import {
   Box,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Input,
   Center,
   Stack,
@@ -59,7 +60,7 @@ export const AuthModal = ({ isOpen, onClose, onSubmit }) => {
               <Divider borderColor="gray.500" />
             </Stack>
             <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-              <FormControl id="email" mb="4">
+              <FormControl id="email" mb="4" isInvalid={errors.email}>
                 <FormLabel>Email address</FormLabel>
                 <Input
                   w="full"
@@ -75,12 +76,10 @@ export const AuthModal = ({ isOpen, onClose, onSubmit }) => {
                   })}
                 />
                 {errors.email && (
-                  <Text pt="2" color="red.400">
-                    {errors.email.message}
-                  </Text>
+                  <FormErrorMessage>{errors.email.message}</FormErrorMessage>
                 )}
               </FormControl>
-              <FormControl id="password" mb="6">
+              <FormControl id="password" mb="6" isInvalid={errors.password}>
                 <FormLabel>Password</FormLabel>
                 <Input
                   variant="filled"
@@ -90,9 +89,7 @@ export const AuthModal = ({ isOpen, onClose, onSubmit }) => {
                   })}
                 />
                 {errors.password && (
-                  <Text pt="2" color="red.400">
-                    {errors.password.message}
-                  </Text>
+                  <FormErrorMessage>{errors.password.message}</FormErrorMessage>
                 )}
               </FormControl>
               <Button colorScheme="teal" isFullWidth type="submit" mb="2">

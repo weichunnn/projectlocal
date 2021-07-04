@@ -11,6 +11,7 @@ import {
   Text,
   Stack,
   FormControl,
+  FormErrorMessage,
   Textarea,
   Wrap,
   Link
@@ -267,12 +268,7 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                       isExternal
                       style={{ textDecoration: 'none' }}
                     >
-                      <Button
-                        as="a"
-                        colorScheme="teal"
-                        variant="solid"
-                        w="full"
-                      >
+                      <Button colorScheme="teal" variant="solid" w="full">
                         More Info
                       </Button>
                     </Link>
@@ -338,16 +334,20 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
             <Box my="8">
               <Heading size="lg">Comments and Reviews</Heading>
               <Box my="4" w="65%" as="form" onSubmit={handleSubmit(onSubmit)}>
-                <FormControl>
+                <FormControl isInvalid={errors.text}>
                   <Textarea
                     placeholder="Leave a review"
                     {...register('text', {
                       required: 'Please write a review before submitting'
                     })}
-                  ></Textarea>
-                  <Flex justify="flex-end">
+                  />
+                  <Flex mt="4" justify="space-between" align="center">
+                    {errors.text ? (
+                      <FormErrorMessage>{errors.text.message}</FormErrorMessage>
+                    ) : (
+                      <Box></Box>
+                    )}
                     <Button
-                      mt="4"
                       px="8"
                       type="submit"
                       colorScheme="teal"
@@ -360,11 +360,6 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                       Leave Review
                     </Button>
                   </Flex>
-                  {user && errors.text && (
-                    <Text pt="2" color="red.400">
-                      {errors.text.message}
-                    </Text>
-                  )}
                 </FormControl>
               </Box>
               {reviews?.map((review) => (
