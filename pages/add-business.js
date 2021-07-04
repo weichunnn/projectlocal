@@ -343,7 +343,12 @@ const AddBusiness = () => {
                     <Input
                       placeholder="Project Local aims to bring the community together in supporting local businesses"
                       {...register('shortDesc', {
-                        required: 'Short Description is required.'
+                        required: 'Short Description is required.',
+                        maxLength: {
+                          value: 85,
+                          message:
+                            'A short description should be short! Think about what do you want people to know when they see your short description.'
+                        }
                       })}
                     />
                     <FormHelperText>
@@ -399,7 +404,12 @@ const AddBusiness = () => {
                       rows="25"
                       {...register('story', {
                         required:
-                          'A compelling business story will let people know more about you. Try to come out with one or contact us if you need an idea.'
+                          'A compelling business story will let people know more about you. Try to come out with one or contact us if you need an idea.',
+                        maxLength: {
+                          value: 3250,
+                          message:
+                            'Too many words may not be a concise read for your readers. Try to reduce some words.'
+                        }
                       })}
                     />
                     <FormHelperText>
@@ -466,7 +476,9 @@ const AddBusiness = () => {
                         <Text mb="2">Address</Text>
                         <Textarea
                           placeholder="No. 21, Jalan Projek Lokal, Taman Lokal, 532049 Kuala Lumpur"
-                          {...register('address')}
+                          {...register('address', {
+                            maxLength: 125
+                          })}
                         />
                       </Box>
                       <Box>
