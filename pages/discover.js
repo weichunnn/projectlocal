@@ -2,6 +2,7 @@ import { Text, Wrap } from '@chakra-ui/react';
 
 import App from '@/components/App';
 import BusinessCard from '@/components/BusinessCard';
+import LocationFilterText from '@/components/LocationFilterText';
 import EmptyState from '@/components/EmptyState';
 import LoadingAppState from '@/components/LoadingAppState';
 import { getAllBusinesses } from '@/lib/db-admin';
@@ -32,17 +33,13 @@ export default function Discover({ initialBusinesses }) {
     typeof data?.businesses == 'undefined' ? [] : data.businesses
   );
 
-  const businessesInLocation = businesses?.filter((business) =>
-    location == 'Across Malaysia' ? true : location.includes(business.location)
-  ).length;
-
   return (
     <App>
       <>
         {businesses?.length ? (
           filteredBusinesses.length ? (
             <>
-              <Text mb="4" fontSize="sm" fontWeight="bold">
+              <Text mb="4" fontWeight="bold">
                 Local businesses around you
               </Text>
               <Wrap justify="center" spacing="8">
@@ -50,11 +47,12 @@ export default function Discover({ initialBusinesses }) {
                   <BusinessCard key={business.id} {...business} />
                 ))}
               </Wrap>
-              <Text mt="4" fontSize="sm" align="right">
-                Showing <b>{filteredBusinesses.length}</b> out of&nbsp;
-                <b>{businessesInLocation}</b>
-                &nbsp;businesses in <b>{location}</b>.
-              </Text>
+              <LocationFilterText
+                currentlyShowing={filteredBusinesses.length}
+                allBusinesses={businesses}
+                mt="4"
+                align="right"
+              />
             </>
           ) : (
             <EmptyState />

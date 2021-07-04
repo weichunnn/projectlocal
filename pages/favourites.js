@@ -3,6 +3,7 @@ import useSWR from 'swr';
 
 import BusinessCard from '@/components/BusinessCard';
 import EmptyBookmarks from '@/components/EmptyBookmarks';
+import LocationFilterText from '@/components/LocationFilterText';
 import EmptyState from '@/components/EmptyState';
 import LoadingAppState from '@/components/LoadingAppState';
 import PrivateRouteWrapper from '@/components/PrivateRouteWrapper';
@@ -19,7 +20,8 @@ const Favourites = () => {
     fetcher
   );
   const businessIds = preferencesData?.preferences.bookmarks;
-  const bookmarkedBusiness = businessesData?.businesses.filter((business) => {
+  const businesses = businessesData?.businesses;
+  const bookmarkedBusiness = businesses?.filter((business) => {
     return businessIds?.includes(business.id);
   });
 
@@ -34,7 +36,7 @@ const Favourites = () => {
           bookmarkedBusiness?.length ? (
             filteredBookmarkedBusinesses?.length ? (
               <>
-                <Text mb="4" fontSize="sm" fontWeight="bold">
+                <Text mb="4" fontWeight="bold">
                   Your favourite local businesses (Make sure you tick all the
                   categories you want to see)
                 </Text>
@@ -43,6 +45,12 @@ const Favourites = () => {
                     <BusinessCard key={business.id} {...business} />
                   ))}
                 </Wrap>
+                <LocationFilterText
+                  currentlyShowing={filteredBookmarkedBusinesses.length}
+                  allBusinesses={businesses}
+                  mt="4"
+                  align="right"
+                />
               </>
             ) : (
               <EmptyState />

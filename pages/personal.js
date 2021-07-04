@@ -1,7 +1,8 @@
-import { Wrap } from '@chakra-ui/react';
+import { Wrap, Text } from '@chakra-ui/react';
 import useSWR from 'swr';
 
 import App from '@/components/App';
+import LocationFilterText from '@/components/LocationFilterText';
 import EmptyState from '@/components/EmptyState';
 import EmptyPersonalBusiness from '@/components/EmptyPersonalBusiness';
 import LoadingAppState from '@/components/LoadingAppState';
@@ -27,11 +28,26 @@ const Personal = () => {
       {data ? (
         userBusinesses.length ? (
           filteredBusinesses.length ? (
-            <Wrap justify="center" spacing="8">
-              {filteredBusinesses?.map((business) => (
-                <BusinessCard key={business.id} {...business} editable="true" />
-              ))}
-            </Wrap>
+            <>
+              <Text mb="4" fontWeight="bold">
+                Your businesses
+              </Text>
+              <Wrap justify="center" spacing="8">
+                {filteredBusinesses?.map((business) => (
+                  <BusinessCard
+                    key={business.id}
+                    {...business}
+                    editable="true"
+                  />
+                ))}
+              </Wrap>
+              <LocationFilterText
+                currentlyShowing={filteredBusinesses.length}
+                allBusinesses={userBusinesses}
+                mt="4"
+                align="right"
+              />
+            </>
           ) : (
             <EmptyState />
           )
