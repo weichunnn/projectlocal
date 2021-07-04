@@ -36,9 +36,9 @@ const Favourites = () => {
           bookmarkedBusiness.length ? (
             filteredBookmarkedBusinesses.length ? (
               <>
-                <Text mb="4" fontWeight="bold">
-                  Your favourite local businesses (Make sure you tick all the
-                  categories you want to see)
+                <Text mb="4">
+                  <b>Your favourite local businesses </b>(Make sure you tick all
+                  the categories you want to see)
                 </Text>
                 <Wrap justify="center" spacing="8">
                   {bookmarkedBusiness?.map((business) => (

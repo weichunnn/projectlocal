@@ -14,7 +14,7 @@ import Logo from '@/components/Logo';
 import { withAuthModal } from '@/components/AuthModal';
 
 const Home = ({ openAuthModal }) => {
-  const { user, loading, signout, signinWithGoogle } = useAuth();
+  const { user, signout } = useAuth();
   return (
     <Box bg="gray.100" h="100vh">
       <Flex
