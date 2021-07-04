@@ -248,10 +248,12 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                 </Button>
               </Box>
             </Flex>
-            <Box p="12">
-              <Carousel imageUrls={carouselImages} />
-            </Box>
-            <Box>
+            {carouselImages.length != 0 && (
+              <Box px="12" mt="12">
+                <Carousel imageUrls={carouselImages} />
+              </Box>
+            )}
+            <Box mt="12">
               <Heading size="lg">Our Beginning and Story</Heading>
               <Flex align="start" justify="space-between" mt="4">
                 <Text
@@ -320,14 +322,18 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                       )}
                     </Wrap>
                   )}
-                  <Box bg="cyan.200" p="4" fontSize="sm" rounded="xl">
-                    <Text fontWeight="bold">Address</Text>
-                    <Text>{address}</Text>
-                  </Box>
-                  <Box bg="red.200" p="4" fontSize="sm" rounded="xl">
-                    <Text fontWeight="bold">Contact Number</Text>
-                    <Text>{contactNumber}</Text>
-                  </Box>
+                  {address && (
+                    <Box bg="cyan.200" p="4" fontSize="sm" rounded="xl">
+                      <Text fontWeight="bold">Address</Text>
+                      <Text>{address}</Text>
+                    </Box>
+                  )}
+                  {contactNumber && (
+                    <Box bg="red.200" p="4" fontSize="sm" rounded="xl">
+                      <Text fontWeight="bold">Contact Number</Text>
+                      <Text>{contactNumber}</Text>
+                    </Box>
+                  )}
                 </Stack>
               </Flex>
             </Box>
