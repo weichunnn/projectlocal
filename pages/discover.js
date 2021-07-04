@@ -1,8 +1,9 @@
-import { Text, Wrap, Center, Spinner } from '@chakra-ui/react';
+import { Text, Wrap } from '@chakra-ui/react';
 
 import App from '@/components/App';
 import BusinessCard from '@/components/BusinessCard';
 import EmptyState from '@/components/EmptyState';
+import LoadingAppState from '@/components/LoadingAppState';
 import { getAllBusinesses } from '@/lib/db-admin';
 import searchLogic from 'utils/searchLogic';
 import { useSearch } from '@/lib/search';
@@ -31,7 +32,7 @@ export default function Discover({ initialBusinesses }) {
     typeof data?.businesses == 'undefined' ? [] : data.businesses
   );
 
-  const businessInLocation = businesses?.filter((business) =>
+  const businessesInLocation = businesses?.filter((business) =>
     location == 'Across Malaysia' ? true : location.includes(business.location)
   ).length;
 
@@ -51,7 +52,7 @@ export default function Discover({ initialBusinesses }) {
               </Wrap>
               <Text mt="4" fontSize="sm" align="right">
                 Showing <b>{filteredBusinesses.length}</b> out of&nbsp;
-                <b>{businessInLocation}</b>
+                <b>{businessesInLocation}</b>
                 &nbsp;businesses in <b>{location}</b>.
               </Text>
             </>
@@ -59,9 +60,7 @@ export default function Discover({ initialBusinesses }) {
             <EmptyState />
           )
         ) : (
-          <Center mt="24" w="full">
-            <Spinner size="xl" speed="0.5s" />
-          </Center>
+          <LoadingAppState />
         )}
       </>
     </App>

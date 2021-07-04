@@ -1,8 +1,10 @@
-import { Text, Wrap, Center, Spinner } from '@chakra-ui/react';
+import { Text, Wrap } from '@chakra-ui/react';
 import useSWR from 'swr';
 
 import BusinessCard from '@/components/BusinessCard';
 import EmptyBookmarks from '@/components/EmptyBookmarks';
+import EmptyState from '@/components/EmptyState';
+import LoadingAppState from '@/components/LoadingAppState';
 import PrivateRouteWrapper from '@/components/PrivateRouteWrapper';
 import App from '@/components/App';
 import searchLogic from '@/utils/searchLogic';
@@ -28,26 +30,28 @@ const Favourites = () => {
   return (
     <App>
       <>
-        {bookmarkedBusiness ? (
-          filteredBookmarkedBusinesses?.length ? (
-            <>
-              <Text mb="4" fontSize="sm" fontWeight="bold">
-                Your favourite local businesses (Make sure you tick all the
-                categories you want to see)
-              </Text>
-              <Wrap justify="center" spacing="8">
-                {bookmarkedBusiness?.map((business) => (
-                  <BusinessCard key={business.id} {...business} />
-                ))}
-              </Wrap>
-            </>
+        {businessesData ? (
+          bookmarkedBusiness?.length ? (
+            filteredBookmarkedBusinesses?.length ? (
+              <>
+                <Text mb="4" fontSize="sm" fontWeight="bold">
+                  Your favourite local businesses (Make sure you tick all the
+                  categories you want to see)
+                </Text>
+                <Wrap justify="center" spacing="8">
+                  {bookmarkedBusiness?.map((business) => (
+                    <BusinessCard key={business.id} {...business} />
+                  ))}
+                </Wrap>
+              </>
+            ) : (
+              <EmptyState />
+            )
           ) : (
             <EmptyBookmarks />
           )
         ) : (
-          <Center mt="24" w="full">
-            <Spinner size="xl" speed="0.5s" />
-          </Center>
+          <LoadingAppState />
         )}
       </>
     </App>

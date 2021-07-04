@@ -10,7 +10,9 @@ import { withAuthModal } from './AuthModal';
 const Header = ({ openAuthModal }) => {
   const { user, signout } = useAuth();
   const router = useRouter();
-  const showSearchBarRoutes = ['/discover', '/favourites'];
+  const showSearchBarRoutes = ['/discover', '/favourites', '/personal'];
+  const restrictDiscoverRoutes = ['/discover', '/favourites', '/personal'];
+
   const showSearchBar = showSearchBarRoutes.includes(router.route);
 
   return (
@@ -34,7 +36,7 @@ const Header = ({ openAuthModal }) => {
         <Stack direction="row" spacing={[2, 12]}>
           {user ? (
             <>
-              {router.route != '/discover' && (
+              {!restrictDiscoverRoutes.includes(router.route) && (
                 <NextLink href="/discover" passHref>
                   <Button as="a" variant="ghost" px={[2, 4]}>
                     Discover
