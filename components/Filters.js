@@ -12,6 +12,7 @@ import { useSearch } from '@/lib/search';
 export default function Filters() {
   const {
     location,
+    categories,
     onChangeLocation,
     onChangeCategories,
     customLocations,
@@ -47,7 +48,7 @@ export default function Filters() {
         passive event listener invocation.' */}
         <CheckboxGroup
           colorScheme="teal"
-          defaultValue={customCategories}
+          defaultValue={categories}
           onChange={onChangeCategories}
         >
           <Stack direction="column">

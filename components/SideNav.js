@@ -1,5 +1,5 @@
 import { Box, Flex, Stack, Button, Icon } from '@chakra-ui/react';
-import { FaHome, FaBookmark, FaSearch } from 'react-icons/fa';
+import { FaHome, FaBookmark, FaSearch, FaUserAlt } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 
 import Filters from '@/components/Filters';
@@ -41,6 +41,12 @@ const PageLink = ({ openAuthModal }) => {
         href="/favourites"
         icon={FaBookmark}
         text="Favourites"
+        openAuthModal={openAuthModal}
+      />
+      <Navigator
+        href="/personal"
+        icon={FaUserAlt}
+        text="Personal"
         openAuthModal={openAuthModal}
       />
     </Stack>
