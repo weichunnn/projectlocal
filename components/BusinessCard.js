@@ -6,7 +6,9 @@ import {
   LinkBox,
   LinkOverlay,
   Wrap,
-  Flex
+  Flex,
+  useToast,
+  Spinner
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import DeleteBusinessButton from './DeleteBusinessButton';
@@ -29,6 +31,20 @@ export default function BusinessCard({
   status,
   editable
 }) {
+  const toast = useToast();
+  const handleClick = () => {
+    if (!toast.isActive('pending-toast')) {
+      toast({
+        id: 'pending-toast',
+        title: 'Pending Status',
+        description: 'The business is pending review hence not viewable.',
+        status: 'warning',
+        position: 'top-right',
+        duration: 5000,
+        isClosable: true
+      });
+    }
+  };
   return (
     <LinkBox maxW="xs" boxShadow="xl" borderRadius="xl" overflow="hidden">
       <Box pos="relative">
@@ -38,7 +54,7 @@ export default function BusinessCard({
           w="full"
           h="200px"
           fit="cover"
-          fallback={<Box bg="gray.300" h="full"></Box>}
+          fallback={<Box bg="gray.300" w="full" h="200px"></Box>}
         />
         {editable && (
           <Flex
@@ -66,13 +82,22 @@ export default function BusinessCard({
             </Badge>
           ))}
         </Wrap>
-        <NextLink href={`/discover/${id}`} passHref>
-          <LinkOverlay>
+        {status == 'active' ? (
+          <NextLink href={`/discover/${id}`} passHref>
+            <LinkOverlay>
+              <Text mt="2" fontWeight="medium" as="h2" fontSize="xl">
+                {name}
+              </Text>
+            </LinkOverlay>
+          </NextLink>
+        ) : (
+          <LinkOverlay onClick={handleClick}>
             <Text mt="2" fontWeight="medium" as="h2" fontSize="xl">
               {name}
             </Text>
           </LinkOverlay>
-        </NextLink>
+        )}
+
         <Text fontSize="xs">
           <b>Location:</b> {location}
         </Text>

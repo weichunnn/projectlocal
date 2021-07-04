@@ -123,9 +123,9 @@ const AddBusiness = () => {
         .then(() => {
           localStorage.removeItem('newBusinessFormData');
           toast({
-            title: 'All Saved',
+            title: 'Application Submitted',
             description:
-              'You had successfully added your business. We will get back to you promptly once we vet through it.',
+              'Thank you for submitting your business. Our team will get back to you soon.',
             status: 'success',
             position: 'top-right',
             duration: 7500,
