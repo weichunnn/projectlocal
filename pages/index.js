@@ -1,23 +1,19 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Text,
-  Link,
-  Stack
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, Text, useColorMode } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
 import { useAuth } from '../lib/auth';
 import Logo from '@/components/Logo';
 import { withAuthModal } from '@/components/AuthModal';
+import Header from '@/components/Header';
 
-const Home = ({ openAuthModal }) => {
-  const { user, signout } = useAuth();
+export default function Home() {
+  const { colorMode } = useColorMode();
+  const bg = { light: 'white', dark: 'gray.800' };
+
   return (
-    <Box bg="gray.100" minH="100vh" overflow="auto">
-      <Flex
+    <Box bg={bg[colorMode]} minH="100vh" overflow="auto">
+      <Header withLogoName={true} />
+      {/* <Flex
         bg="white"
         w="full"
         h="75px"
@@ -65,7 +61,7 @@ const Home = ({ openAuthModal }) => {
             </>
           )}
         </Stack>
-      </Flex>
+      </Flex> */}
       <Flex
         direction="column"
         maxW="750px"
@@ -87,6 +83,4 @@ const Home = ({ openAuthModal }) => {
       </Flex>
     </Box>
   );
-};
-
-export default withAuthModal(Home);
+}

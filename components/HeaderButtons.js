@@ -27,11 +27,18 @@ const HeaderButtons = ({ openAuthModal }) => {
           </Button>
         </NextLink>
       )}
-      <NextLink href="/add-business" passHref>
-        <Button as="a" colorScheme={colorScheme} variant={variant} px={[2, 4]}>
-          Add a business
-        </Button>
-      </NextLink>
+      {router.route != '/add-business' && (
+        <NextLink href="/add-business" passHref>
+          <Button
+            as="a"
+            colorScheme={colorScheme}
+            variant={variant}
+            px={[2, 4]}
+          >
+            Add a business
+          </Button>
+        </NextLink>
+      )}
       <Button
         colorScheme={colorScheme}
         variant={variant}
