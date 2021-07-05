@@ -45,7 +45,7 @@ export default function MobileNav(props) {
       <Drawer size="xs" isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerCloseButton pos="absolute" zIndex="5" />
+          <DrawerCloseButton pos="absolute" zIndex="5" my="2" />
           <DrawerBody>
             <Box mt="12" px="4">
               <SearchBar showSearch={true} my="8" />
