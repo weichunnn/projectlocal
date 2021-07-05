@@ -16,7 +16,8 @@ import {
   IconButton,
   Icon,
   useToast,
-  Divider
+  Divider,
+  useBreakpointValue
 } from '@chakra-ui/react';
 import { FaGoogle, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
@@ -38,6 +39,7 @@ export default function Login() {
     formState: { errors }
   } = useForm();
   const watchPassword = watch('password', '');
+
   const onSubmit = (data, e, provider = false) => {
     const signupMethod = provider
       ? signinWithGoogle('/discover')
@@ -67,9 +69,17 @@ export default function Login() {
   };
 
   return (
-    <Box h="100vh" w="full">
-      <Flex direction="row" h="full" w="full">
-        <Image h="full" w="35%" src="/static/kuala-lumpur.jpeg"></Image>
+    <Box bg="gray.100" w="full" overflow="auto">
+      <Flex
+        direction={useBreakpointValue({ base: 'column', md: 'row' })}
+        h="full"
+        w="full"
+      >
+        <Image
+          h={useBreakpointValue({ base: '75%', md: 'full' })}
+          w={useBreakpointValue({ base: 'full', md: '35%' })}
+          src="/static/kuala-lumpur.jpeg"
+        ></Image>
         <Flex flex="1" h="full">
           <Flex
             p="12"
@@ -103,6 +113,7 @@ export default function Login() {
               <FormControl id="name" mb="4" isInvalid={errors.name}>
                 <FormLabel>Name</FormLabel>
                 <Input
+                  bg="white"
                   placeholder="John Baker"
                   variant="filled"
                   w="full"
@@ -116,6 +127,7 @@ export default function Login() {
               <FormControl id="email" mb="4" isInvalid={errors.email}>
                 <FormLabel>Email address</FormLabel>
                 <Input
+                  bg="white"
                   w="full"
                   variant="filled"
                   placeholder="johnbaker@gmail.com"
@@ -133,11 +145,16 @@ export default function Login() {
                   <FormErrorMessage>{errors.email.message}</FormErrorMessage>
                 )}
               </FormControl>
-              <Stack direction="row" spacing="12" mb="6">
+              <Stack
+                direction={useBreakpointValue({ base: 'column', md: 'row' })}
+                spacing={useBreakpointValue({ base: '4', md: '12' })}
+                mb="6"
+              >
                 <FormControl id="password" isInvalid={errors.password}>
                   <FormLabel>Password</FormLabel>
                   <InputGroup>
                     <Input
+                      bg="white"
                       variant="filled"
                       placeholder="At least 8+ characters"
                       type={show ? 'text' : 'password'}
@@ -171,6 +188,7 @@ export default function Login() {
                 >
                   <FormLabel>Confirm Password</FormLabel>
                   <Input
+                    bg="white"
                     variant="filled"
                     type="password"
                     placeholder="Re-enter password"
