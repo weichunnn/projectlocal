@@ -16,7 +16,7 @@ import { withAuthModal } from '@/components/AuthModal';
 const Home = ({ openAuthModal }) => {
   const { user, signout } = useAuth();
   return (
-    <Box bg="gray.100" h="100vh">
+    <Box bg="gray.100" overflow="auto">
       <Flex
         bg="white"
         w="full"

@@ -15,7 +15,13 @@ export default function App({ children }) {
         borderRightWidth="1px"
       />
       <Box pl={['0', null, '18rem']} pt="75px">
-        <Box bg="gray.100" minHeight="calc(100vh - 75px)" py="4" px="8">
+        <Box
+          bg="gray.100"
+          minHeight="calc(100vh - 75px)"
+          py="4"
+          px="8"
+          overflow="auto"
+        >
           {children}
         </Box>
       </Box>
