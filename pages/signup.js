@@ -79,12 +79,7 @@ export default function Login() {
         />
         <NextLink href="/" passHref>
           <Box as="a" ml="8" mt="8" pos="absolute" top="0" color="white">
-            <Stack direction="row" align="center" spacing="4">
-              <Logo boxSize="16" />
-              <Text fontWeight="bold" fontSize="2xl">
-                Project Local
-              </Text>
-            </Stack>
+            <Logo boxSize="16" withLogoName={true} fontSize="2xl" />
           </Box>
         </NextLink>
         <Flex flex="1">
