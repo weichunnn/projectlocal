@@ -27,17 +27,19 @@ export default function Header() {
           </Link>
         </NextLink>
         <SearchBar mx="16" />
-        <Stack
-          direction="row"
-          spacing="12"
-          display={['none', null, 'inline-flex']}
-        >
-          <HeaderButtons />
-        </Stack>
-        <Stack direction="row" spacing="4" ml="8">
-          <IconButton rounded="xl" icon={<MoonIcon />} />
-          <MobileNav display={['block', null, 'none']} />
-        </Stack>
+        <Flex align="center">
+          <Stack
+            direction="row"
+            spacing="12"
+            display={['none', null, 'inline-flex']}
+          >
+            <HeaderButtons />
+          </Stack>
+          <Stack direction="row" spacing="4" ml="8">
+            <IconButton rounded="xl" icon={<MoonIcon />} />
+            <MobileNav display={['block', null, 'none']} />
+          </Stack>
+        </Flex>
       </Flex>
     </Box>
   );
