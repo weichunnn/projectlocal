@@ -25,7 +25,7 @@ export default function Carousel({ imageUrls }) {
           h={['275px', null, '500px']}
           borderRadius="20"
           fallback={
-            <Center h="500px">
+            <Center h={['275px', null, '500px']}>
               <Spinner />
             </Center>
           }

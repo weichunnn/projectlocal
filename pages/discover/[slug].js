@@ -282,7 +282,7 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                 </Text>
                 <Stack
                   direction="column"
-                  w={['100%', null, '65%']}
+                  w={['100%', null, '25%']}
                   spacing="8"
                   mt={['8', null, '0']}
                 >

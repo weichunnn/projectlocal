@@ -22,7 +22,8 @@ import {
   InputLeftElement,
   FormErrorMessage,
   Select,
-  useToast
+  useToast,
+  useBreakpointValue
 } from '@chakra-ui/react';
 import ReactSelect from 'react-select';
 
@@ -176,8 +177,17 @@ const AddBusiness = () => {
     <>
       <Header />
       <Box pt="75px">
-        <Box as="form" onSubmit={handleSubmit(onSubmit)} px="24" py="8">
-          <Flex align="center" justify="space-between">
+        <Box
+          as="form"
+          onSubmit={handleSubmit(onSubmit)}
+          px={['8', null, '24']}
+          py="8"
+        >
+          <Flex
+            direction={useBreakpointValue({ base: 'column', md: 'row' })}
+            align={[null, null, 'center']}
+            justify="space-between"
+          >
             <Box>
               <Breadcrumb>
                 <BreadcrumbItem>
@@ -199,7 +209,11 @@ const AddBusiness = () => {
                 </BreadcrumbItem>
               </Breadcrumb>
             </Box>
-            <Stack direction="row" spacing="4">
+            <Stack
+              direction="row"
+              spacing="4"
+              display={['none', null, 'block']}
+            >
               <Button
                 isLoading={loading}
                 type="submit"
@@ -227,13 +241,21 @@ const AddBusiness = () => {
             </Stack>
           </Flex>
           <Flex direction="column">
-            <Flex mt="8" align="center" justify="space-between">
-              <Flex align="center">
+            <Flex
+              direction={useBreakpointValue({ base: 'column', md: 'row' })}
+              mt="8"
+              align="center"
+              justify="space-between"
+            >
+              <Flex
+                direction={useBreakpointValue({ base: 'column', md: 'row' })}
+                align="center"
+              >
                 <label htmlFor="businessImage">
                   <Avatar
                     bg="teal"
                     mr="8"
-                    size="xl"
+                    size={useBreakpointValue({ base: 'lg', md: 'xl' })}
                     src={image ? URL.createObjectURL(image) : null}
                     icon={<Icon color="white" as={FaImage} />}
                   />
@@ -249,7 +271,17 @@ const AddBusiness = () => {
                     />
                   </VisuallyHidden>
                 </label>
-                <FormControl isInvalid={errors.name}>
+                {errors.businessImage && (
+                  <Text
+                    pt="4"
+                    color="red.500"
+                    fontSize="sm"
+                    display={['block', null, 'none']}
+                  >
+                    {errors.businessImage.message}
+                  </Text>
+                )}
+                <FormControl isInvalid={errors.name} mt={['4', null, '0']}>
                   <Controller
                     control={control}
                     rules={{
@@ -267,14 +299,20 @@ const AddBusiness = () => {
                         }
                         placeholder="Carpe Diem"
                         fontWeight="bold"
-                        fontSize="3xl"
+                        fontSize={['xl', null, '3xl']}
                         color="gray.500"
                         isPreviewFocusable={false}
                       >
-                        <Stack direction="row" align="center">
-                          <EditablePreview px="4" />
-                          <EditableInput px="4" />
+                        <Stack
+                          direction={useBreakpointValue({
+                            base: 'column',
+                            md: 'row'
+                          })}
+                          align="center"
+                        >
                           <Flex align="center">
+                            <EditablePreview px="4" />
+                            <EditableInput px="4" />
                             <EditableControls />
                           </Flex>
                           {errors.name && (
@@ -288,7 +326,7 @@ const AddBusiness = () => {
                   />
                 </FormControl>
               </Flex>
-              <Box>
+              <Box mt={['4', null, '0']}>
                 <Button
                   leftIcon={<Icon as={FaHeart} />}
                   colorScheme={like ? 'red' : 'teal'}
@@ -309,11 +347,16 @@ const AddBusiness = () => {
               </Box>
             </Flex>
             {errors.businessImage && (
-              <Text pt="4" color="red.500" fontSize="sm">
+              <Text
+                pt="4"
+                color="red.500"
+                fontSize="sm"
+                display={['none', null, 'block']}
+              >
                 {errors.businessImage.message}
               </Text>
             )}
-            <Box px="12" mt="8">
+            <Box px={['4', null, '12']} mt="12">
               <Carousel
                 imageUrls={
                   carouselImages.length
@@ -334,8 +377,13 @@ const AddBusiness = () => {
               </Box>
             </Box>
             <Box my="8">
-              <Flex align="start" justify="space-between" mt="4">
-                <Stack w="65%" spacing="8">
+              <Flex
+                direction={useBreakpointValue({ base: 'column', md: 'row' })}
+                align="start"
+                justify="space-between"
+                mt="4"
+              >
+                <Stack w={['100%', null, '65%']} spacing="8">
                   <FormControl isInvalid={errors.shortDesc}>
                     <Text mb="2" fontWeight="medium">
                       Short Description
@@ -423,8 +471,12 @@ const AddBusiness = () => {
                     )}
                   </FormControl>
                 </Stack>
-
-                <Stack direction="column" w="25%" spacing="8">
+                <Stack
+                  direction="column"
+                  w={['100%', null, '25%']}
+                  spacing="8"
+                  mt={['8', null, '0']}
+                >
                   <FormControl>
                     <Text mb="2" fontWeight="medium">
                       More Info Link
@@ -546,6 +598,32 @@ const AddBusiness = () => {
               </Flex>
             </Box>
           </Flex>
+          <Stack direction="row" spacing="4" display={['block', null, 'none']}>
+            <Button
+              isLoading={loading}
+              type="submit"
+              variant="outline"
+              colorScheme="teal"
+              px="12"
+              onClick={() => {
+                saveState = true;
+              }}
+            >
+              Save
+            </Button>
+            <Button
+              isLoading={loading}
+              type="submit"
+              variant="solid"
+              colorScheme="teal"
+              px="12"
+              onClick={() => {
+                saveState = false;
+              }}
+            >
+              Submit
+            </Button>
+          </Stack>
         </Box>
       </Box>
     </>
