@@ -8,7 +8,7 @@ import SearchBar from './SearchBar';
 import HeaderButtons from './HeaderButtons';
 import { withAuthModal } from './AuthModal';
 
-const Header = ({ openAuthModal }) => {
+export default function Header() {
   return (
     <Box
       pos="fixed"
@@ -32,7 +32,7 @@ const Header = ({ openAuthModal }) => {
           spacing="12"
           display={['none', null, 'inline-flex']}
         >
-          <HeaderButtons openAuthModal={openAuthModal} />
+          <HeaderButtons />
         </Stack>
         <Stack direction="row" spacing="4" ml="8">
           <IconButton rounded="xl" icon={<MoonIcon />} />
@@ -41,6 +41,4 @@ const Header = ({ openAuthModal }) => {
       </Flex>
     </Box>
   );
-};
-
-export default withAuthModal(Header);
+}

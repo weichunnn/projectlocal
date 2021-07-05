@@ -3,8 +3,9 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 
 import { useAuth } from '@/lib/auth';
+import { withAuthModal } from './AuthModal';
 
-export default function HeaderButtons({ openAuthModal }) {
+const HeaderButtons = ({ openAuthModal }) => {
   const router = useRouter();
   const { user, signout } = useAuth();
   const restrictDiscoverRoutes = ['/discover', '/favourites', '/personal'];
@@ -58,4 +59,6 @@ export default function HeaderButtons({ openAuthModal }) {
       </NextLink>
     </>
   );
-}
+};
+
+export default withAuthModal(HeaderButtons);
