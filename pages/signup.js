@@ -16,8 +16,7 @@ import {
   IconButton,
   Icon,
   useToast,
-  Divider,
-  useBreakpointValue
+  Divider
 } from '@chakra-ui/react';
 import { FaGoogle, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
@@ -70,14 +69,10 @@ export default function Login() {
 
   return (
     <Box bg="gray.100" w="full" overflow="auto">
-      <Flex
-        direction={useBreakpointValue({ base: 'column', md: 'row' })}
-        h="full"
-        w="full"
-      >
+      <Flex direction={['column', null, 'row']} h="full" w="full">
         <Image
-          h={useBreakpointValue({ base: '75%', md: 'full' })}
-          w={useBreakpointValue({ base: 'full', md: '35%' })}
+          h={['75%', null, 'full']}
+          w={['full', null, '35%']}
           src="/static/kuala-lumpur.jpeg"
         ></Image>
         <Flex flex="1" h="full">
@@ -146,8 +141,8 @@ export default function Login() {
                 )}
               </FormControl>
               <Stack
-                direction={useBreakpointValue({ base: 'column', md: 'row' })}
-                spacing={useBreakpointValue({ base: '4', md: '12' })}
+                direction={['column', null, 'row']}
+                spacing={['4', null, '12']}
                 mb="6"
               >
                 <FormControl id="password" isInvalid={errors.password}>

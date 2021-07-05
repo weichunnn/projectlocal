@@ -225,7 +225,7 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
           </Breadcrumb>
           <Flex direction="column">
             <Flex
-              direction={useBreakpointValue({ base: 'column', md: 'row' })}
+              direction={['column', null, 'row']}
               mt="8"
               align="center"
               justify="space-between"
@@ -268,7 +268,7 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
             <Box mt="12">
               <Heading size="lg">Our Beginning and Story</Heading>
               <Flex
-                direction={useBreakpointValue({ base: 'column', md: 'row' })}
+                direction={['column', null, 'row']}
                 align="start"
                 justify="space-between"
                 mt="4"
@@ -282,7 +282,7 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                 </Text>
                 <Stack
                   direction="column"
-                  w={['100%', null, '25%']}
+                  w={['100%', null, '5%']}
                   spacing="8"
                   mt={['8', null, '0']}
                 >

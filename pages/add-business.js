@@ -184,7 +184,7 @@ const AddBusiness = () => {
           py="8"
         >
           <Flex
-            direction={useBreakpointValue({ base: 'column', md: 'row' })}
+            direction={['column', null, 'row']}
             align={[null, null, 'center']}
             justify="space-between"
           >
@@ -242,15 +242,12 @@ const AddBusiness = () => {
           </Flex>
           <Flex direction="column">
             <Flex
-              direction={useBreakpointValue({ base: 'column', md: 'row' })}
+              direction={['column', null, 'row']}
               mt="8"
               align="center"
               justify="space-between"
             >
-              <Flex
-                direction={useBreakpointValue({ base: 'column', md: 'row' })}
-                align="center"
-              >
+              <Flex direction={['column', null, 'row']} align="center">
                 <label htmlFor="businessImage">
                   <Avatar
                     bg="teal"
@@ -304,10 +301,7 @@ const AddBusiness = () => {
                         isPreviewFocusable={false}
                       >
                         <Stack
-                          direction={useBreakpointValue({
-                            base: 'column',
-                            md: 'row'
-                          })}
+                          direction={['column', null, 'row']}
                           align="center"
                         >
                           <Flex align="center">
@@ -378,7 +372,7 @@ const AddBusiness = () => {
             </Box>
             <Box my="8">
               <Flex
-                direction={useBreakpointValue({ base: 'column', md: 'row' })}
+                direction={['column', null, 'row']}
                 align="start"
                 justify="space-between"
                 mt="4"
