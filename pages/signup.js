@@ -23,6 +23,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useAuth } from '@/lib/auth';
+import Logo from '@/components/Logo';
+import NextLink from 'next/link';
 
 export default function Login() {
   const { signupwithEmail, signinWithGoogle, loading } = useAuth();
@@ -71,11 +73,21 @@ export default function Login() {
     <Box bg="gray.100" w="full" overflow="auto">
       <Flex direction={['column', null, 'row']} h="full" w="full">
         <Image
-          h={['75%', null, 'full']}
-          w={['full', null, '35%']}
+          h={['75%', null, '100vh']}
+          w={['full', null, '40%']}
           src="/static/kuala-lumpur.jpeg"
-        ></Image>
-        <Flex flex="1" h="full">
+        />
+        <NextLink href="/" passHref>
+          <Box as="a" ml="8" mt="8" pos="absolute" top="0" color="white">
+            <Stack direction="row" align="center" spacing="4">
+              <Logo boxSize="16" />
+              <Text fontWeight="bold" fontSize="2xl">
+                Project Local
+              </Text>
+            </Stack>
+          </Box>
+        </NextLink>
+        <Flex flex="1">
           <Flex
             p="12"
             w="full"

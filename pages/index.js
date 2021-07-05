@@ -26,9 +26,14 @@ const Home = ({ openAuthModal }) => {
         justify="space-between"
       >
         <NextLink href="/" passHref>
-          <Link>
-            <Logo boxSize="10" />
-          </Link>
+          <Box as="a">
+            <Stack direction="row" align="center" spacing="4">
+              <Logo boxSize="10" />
+              <Text fontWeight="bold" fontSize="xl">
+                Project Local
+              </Text>
+            </Stack>
+          </Box>
         </NextLink>
         <Stack direction="row" spacing={[2, 12]}>
           <NextLink href="/discover" passHref>
