@@ -18,7 +18,7 @@ const PrivateRouteWrapper = (Component) => (props) => {
 
   if (loading) {
     return (
-      <Center h="100vh" bg="gray.100">
+      <Center h="100vh" bg="gray.100" overflow="auto">
         <Spinner />
       </Center>
     );

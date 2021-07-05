@@ -22,10 +22,10 @@ export default function Carousel({ imageUrls }) {
       <Center bg="gray.100" borderRadius="20">
         <Image
           src={url}
-          h="500px"
+          h={['275px', null, '500px']}
           borderRadius="20"
           fallback={
-            <Center h="500px">
+            <Center h={['275px', null, '500px']}>
               <Spinner />
             </Center>
           }

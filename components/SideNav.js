@@ -53,22 +53,12 @@ const PageLink = ({ openAuthModal }) => {
   );
 };
 
-const SideNav = ({ openAuthModal }) => {
+const SideNav = ({ openAuthModal, ...props }) => {
   return (
-    <Box
-      pos="fixed"
-      top="75px"
-      maxW="18rem"
-      w="full"
-      h="full"
-      bg="white"
-      borderRightWidth="1px"
-      py="4"
-      px="8"
-    >
-      <Flex direction="column" align="center">
+    <Box pos="fixed" maxW="18rem" w="full" h="full" bg="white" {...props}>
+      <Flex direction="column">
         <PageLink openAuthModal={openAuthModal} />
-        <Filters />
+        <Filters mt="8" />
       </Flex>
     </Box>
   );

@@ -3,7 +3,7 @@ import { format, parseISO } from 'date-fns';
 
 export default function Review({ author, createdAt, text }) {
   return (
-    <Box w="65%" my="4">
+    <Box w="full" my="4">
       <Heading size="sm" fontWeight="medium">
         {author}
       </Heading>

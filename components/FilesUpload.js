@@ -98,7 +98,10 @@ const FileUpload = ({
       >
         <Stack spacing="1" direction="column" fontSize="sm" align="center">
           <ImageIcon boxSize="12" />
-          <Button>Upload Images or Drag and Drop</Button>
+          <Stack spacing="2" align="center" direction={['column', null, 'row']}>
+            <Button>Upload Images</Button>
+            <Text fontWeight="medium">or Drag and Drop</Text>
+          </Stack>
           <Input
             pos="absolute"
             top="0"
@@ -138,8 +141,8 @@ const FileUpload = ({
                     <Box pos="relative">
                       <Image
                         rounded="xl"
-                        w="250px"
-                        h="150px"
+                        w={['187px', null, '250px']}
+                        h={['112px', null, '150px']}
                         objectFit="cover"
                         src={URL.createObjectURL(file)}
                       />

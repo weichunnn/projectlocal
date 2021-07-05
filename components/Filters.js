@@ -9,7 +9,7 @@ import {
 
 import { useSearch } from '@/lib/search';
 
-export default function Filters() {
+export default function Filters(props) {
   const {
     location,
     categories,
@@ -21,7 +21,7 @@ export default function Filters() {
   const allLocations = ['Across Malaysia', ...customLocations];
 
   return (
-    <Stack spacing="8" w="full">
+    <Stack spacing="8" w="full" {...props}>
       <Box>
         <Text mb={2} fontWeight="bold">
           Location

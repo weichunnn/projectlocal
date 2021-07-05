@@ -14,7 +14,8 @@ import {
   FormErrorMessage,
   Textarea,
   Wrap,
-  Link
+  Link,
+  useBreakpointValue
 } from '@chakra-ui/react';
 import {
   FaHeart,
@@ -108,7 +109,7 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
   const likedBusinessIds = preferencesData?.preferences.likes;
   const isCurrentPageliked = likedBusinessIds?.includes(slug);
 
-  const numberofContactLinks = [
+  const numberOfContactLinks = [
     facebookLink,
     instagramLink,
     linkedinLink,
@@ -206,7 +207,7 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
     <>
       <Header />
       <Box pt="75px">
-        <Box px="24" py="8">
+        <Box px={['8', null, '24']} py="8">
           <Breadcrumb>
             <BreadcrumbItem>
               <NextLink href="/" passHref>
@@ -223,12 +224,23 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
             </BreadcrumbItem>
           </Breadcrumb>
           <Flex direction="column">
-            <Flex mt="8" align="center" justify="space-between">
-              <Flex align="center">
-                <Avatar mr="8" size="xl" src={businessImage} />
-                <Heading size="xl">{name}</Heading>
+            <Flex
+              direction={['column', null, 'row']}
+              mt="8"
+              align="center"
+              justify="space-between"
+            >
+              <Flex align="center" w="full" justify="flex-start">
+                <Avatar
+                  mr="8"
+                  size={useBreakpointValue({ base: 'lg', md: 'xl' })}
+                  src={businessImage}
+                />
+                <Heading size={useBreakpointValue({ base: 'lg', md: 'xl' })}>
+                  {name}
+                </Heading>
               </Flex>
-              <Box>
+              <Flex direction="row" mt={['8', null, '0']}>
                 <Button
                   leftIcon={<Icon as={FaHeart} />}
                   colorScheme={isCurrentPageliked ? 'red' : 'teal'}
@@ -246,24 +258,34 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                 >
                   {isCurrentPageBookmarked ? 'Saved' : 'Save'}
                 </Button>
-              </Box>
+              </Flex>
             </Flex>
             {carouselImages.length != 0 && (
-              <Box px="12" mt="12">
+              <Box px={['4', null, '12']} mt="12">
                 <Carousel imageUrls={carouselImages} />
               </Box>
             )}
             <Box mt="12">
               <Heading size="lg">Our Beginning and Story</Heading>
-              <Flex align="start" justify="space-between" mt="4">
+              <Flex
+                direction={['column', null, 'row']}
+                align="start"
+                justify="space-between"
+                mt="4"
+              >
                 <Text
-                  w="65%"
+                  w={['100%', null, '65%']}
                   align="justify"
                   style={{ whiteSpace: 'pre-wrap' }}
                 >
                   {story}
                 </Text>
-                <Stack direction="column" w="25%" spacing="8">
+                <Stack
+                  direction="column"
+                  w={['100%', null, '5%']}
+                  spacing="8"
+                  mt={['8', null, '0']}
+                >
                   {primaryLink && (
                     <Link
                       href={primaryLink}
@@ -275,26 +297,26 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                       </Button>
                     </Link>
                   )}
-                  {numberofContactLinks && (
+                  {numberOfContactLinks && (
                     <Wrap
                       align="center"
                       justify={
-                        numberofContactLinks >= 3
+                        numberOfContactLinks >= 3
                           ? 'space-between'
-                          : numberofContactLinks == 2
+                          : numberOfContactLinks == 2
                           ? 'center'
                           : null
                       }
                       spacing="8"
                     >
-                      {whatsappLink && (
+                      {true && (
                         <ContactLinkBox
                           link={whatsappLink}
                           backgroundColor="#22D266"
                           icon={FaWhatsapp}
                         />
                       )}
-                      {facebookLink && (
+                      {true && (
                         <ContactLinkBox
                           link={facebookLink}
                           backgroundColor="#3b5998"
@@ -339,7 +361,12 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
             </Box>
             <Box my="8">
               <Heading size="lg">Comments and Reviews</Heading>
-              <Box my="4" w="65%" as="form" onSubmit={handleSubmit(onSubmit)}>
+              <Box
+                my="4"
+                w={['100%', null, '65%']}
+                as="form"
+                onSubmit={handleSubmit(onSubmit)}
+              >
                 <FormControl isInvalid={errors.text}>
                   <Textarea
                     placeholder="Leave a review"
@@ -369,7 +396,9 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                 </FormControl>
               </Box>
               {reviews?.map((review) => (
-                <Review key={review.id} {...review} />
+                <Box w={['100%', null, '65%']}>
+                  <Review key={review.id} {...review} />
+                </Box>
               ))}
             </Box>
           </Flex>
