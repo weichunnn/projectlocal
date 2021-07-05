@@ -345,13 +345,25 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
                     </Wrap>
                   )}
                   {address && (
-                    <Box bg="cyan.200" p="4" fontSize="sm" rounded="xl">
+                    <Box
+                      bg="cyan.200"
+                      p="4"
+                      fontSize="sm"
+                      rounded="xl"
+                      color="black"
+                    >
                       <Text fontWeight="bold">Address</Text>
                       <Text>{address}</Text>
                     </Box>
                   )}
                   {contactNumber && (
-                    <Box bg="red.200" p="4" fontSize="sm" rounded="xl">
+                    <Box
+                      bg="red.200"
+                      p="4"
+                      fontSize="sm"
+                      rounded="xl"
+                      color="black"
+                    >
                       <Text fontWeight="bold">Contact Number</Text>
                       <Text>{contactNumber}</Text>
                     </Box>
