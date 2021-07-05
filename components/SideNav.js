@@ -13,7 +13,6 @@ const Navigator = ({ href, icon, text, openAuthModal }) => {
 
   return (
     <Button
-      as="a"
       justifyContent="flex-start"
       leftIcon={<Icon as={icon} />}
       w="full"

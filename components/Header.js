@@ -31,9 +31,9 @@ export default function Header({ withLogoName }) {
     >
       <Flex align="center" justify="space-between" h="100%">
         <NextLink href="/" passHref>
-          <Link>
+          <Box as="a">
             <Logo boxSize="10" withLogoName={withLogoName} />
-          </Link>
+          </Box>
         </NextLink>
         <SearchBar mx="16" />
         <Flex align="center">

@@ -1,14 +1,11 @@
 import { Box, Flex, Heading, Text, useColorMode } from '@chakra-ui/react';
-import NextLink from 'next/link';
 
-import { useAuth } from '../lib/auth';
 import Logo from '@/components/Logo';
-import { withAuthModal } from '@/components/AuthModal';
 import Header from '@/components/Header';
 
 export default function Home() {
   const { colorMode } = useColorMode();
-  const bg = { light: 'white', dark: 'gray.800' };
+  const bg = { light: 'gray.100', dark: 'gray.800' };
 
   return (
     <Box bg={bg[colorMode]} minH="100vh" overflow="auto">

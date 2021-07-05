@@ -5,7 +5,7 @@ import SideNav from './SideNav';
 
 export default function App({ children }) {
   const { colorMode } = useColorMode();
-  const bg = { light: 'white', dark: 'gray.800' };
+  const bg = { light: 'gray.100', dark: 'gray.800' };
 
   return (
     <>

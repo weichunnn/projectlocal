@@ -53,7 +53,6 @@ const HeaderButtons = ({ openAuthModal }) => {
       ) : (
         <>
           <Button
-            as="a"
             variant={variant}
             colorScheme={colorScheme}
             px={[2, 4]}

@@ -18,7 +18,8 @@ import {
   Divider,
   Link,
   Icon,
-  Wrap
+  Wrap,
+  useColorMode
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { FaGoogle } from 'react-icons/fa';
@@ -33,6 +34,8 @@ export const AuthModal = ({ isOpen, onClose, onSubmit }) => {
     register,
     formState: { errors }
   } = useForm();
+
+  const { colorMode } = useColorMode();
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -99,7 +102,10 @@ export const AuthModal = ({ isOpen, onClose, onSubmit }) => {
             <Wrap justify="center">
               <Text>Don't have an account? </Text>&nbsp;
               <NextLink href="/signup" passHref>
-                <Link color="teal" fontWeight="medium">
+                <Link
+                  color={colorMode == 'light' ? 'teal' : 'teal.100'}
+                  fontWeight="medium"
+                >
                   Sign up here
                 </Link>
               </NextLink>

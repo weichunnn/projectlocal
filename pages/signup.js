@@ -16,7 +16,8 @@ import {
   IconButton,
   Icon,
   useToast,
-  Divider
+  Divider,
+  useColorMode
 } from '@chakra-ui/react';
 import { FaGoogle, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
@@ -27,6 +28,10 @@ import Logo from '@/components/Logo';
 import NextLink from 'next/link';
 
 export default function Login() {
+  const { colorMode } = useColorMode();
+  const bg = { light: 'gray.100', dark: 'gray.800' };
+  const inputBg = { light: 'white', dark: 'gray.700' };
+
   const { signupwithEmail, signinWithGoogle, loading } = useAuth();
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
@@ -70,7 +75,7 @@ export default function Login() {
   };
 
   return (
-    <Box bg="gray.100" w="full" overflow="auto">
+    <Box bg={bg[colorMode]} w="full" overflow="auto">
       <Flex direction={['column', null, 'row']} h="full" w="full">
         <Image
           h={['75%', null, '100vh']}
@@ -115,7 +120,7 @@ export default function Login() {
               <FormControl id="name" mb="4" isInvalid={errors.name}>
                 <FormLabel>Name</FormLabel>
                 <Input
-                  bg="white"
+                  bg={inputBg[colorMode]}
                   placeholder="John Baker"
                   variant="filled"
                   w="full"
@@ -129,7 +134,7 @@ export default function Login() {
               <FormControl id="email" mb="4" isInvalid={errors.email}>
                 <FormLabel>Email address</FormLabel>
                 <Input
-                  bg="white"
+                  bg={inputBg[colorMode]}
                   w="full"
                   variant="filled"
                   placeholder="johnbaker@gmail.com"
@@ -156,7 +161,7 @@ export default function Login() {
                   <FormLabel>Password</FormLabel>
                   <InputGroup>
                     <Input
-                      bg="white"
+                      bg={inputBg[colorMode]}
                       variant="filled"
                       placeholder="At least 8+ characters"
                       type={show ? 'text' : 'password'}
@@ -190,7 +195,7 @@ export default function Login() {
                 >
                   <FormLabel>Confirm Password</FormLabel>
                   <Input
-                    bg="white"
+                    bg={inputBg[colorMode]}
                     variant="filled"
                     type="password"
                     placeholder="Re-enter password"
