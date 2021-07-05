@@ -1,4 +1,4 @@
-import { Box, Flex, Stack, Button, Icon } from '@chakra-ui/react';
+import { Box, Flex, Stack, Button, Icon, useColorMode } from '@chakra-ui/react';
 import { FaHome, FaBookmark, FaSearch, FaUserAlt } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 
@@ -54,8 +54,18 @@ const PageLink = ({ openAuthModal }) => {
 };
 
 const SideNav = ({ openAuthModal, ...props }) => {
+  const { colorMode } = useColorMode();
+  const bg = { light: 'white', dark: 'gray.800' };
+
   return (
-    <Box pos="fixed" maxW="18rem" w="full" h="full" bg="white" {...props}>
+    <Box
+      pos="fixed"
+      maxW="18rem"
+      w="full"
+      h="full"
+      bg={bg[colorMode]}
+      {...props}
+    >
       <Flex direction="column">
         <PageLink openAuthModal={openAuthModal} />
         <Filters mt="8" />

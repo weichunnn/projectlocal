@@ -7,7 +7,8 @@ import {
   IconButton,
   useDisclosure,
   Box,
-  Stack
+  Stack,
+  useColorMode
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
@@ -36,6 +37,8 @@ const useRouteChanged = (callback) => {
 
 export default function MobileNav(props) {
   const { isOpen, onToggle, onClose } = useDisclosure();
+  const { colorMode } = useColorMode();
+  const bg = { light: 'white', dark: 'gray.800' };
 
   useRouteChanged(onClose);
 
@@ -44,7 +47,7 @@ export default function MobileNav(props) {
       <IconButton variant="ghost" icon={<HamburgerIcon />} onClick={onToggle} />
       <Drawer size="xs" isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent bg={bg[colorMode]}>
           <DrawerCloseButton pos="absolute" zIndex="5" my="2" />
           <DrawerBody>
             <Box mt="12" px="4">

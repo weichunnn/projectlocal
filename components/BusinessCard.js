@@ -7,8 +7,7 @@ import {
   LinkOverlay,
   Wrap,
   Flex,
-  useToast,
-  Spinner
+  useToast
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import DeleteBusinessButton from './DeleteBusinessButton';
@@ -46,7 +45,13 @@ export default function BusinessCard({
     }
   };
   return (
-    <LinkBox maxW="xs" boxShadow="xl" borderRadius="xl" overflow="hidden">
+    <LinkBox
+      maxW="xs"
+      boxShadow="xl"
+      borderRadius="xl"
+      overflow="hidden"
+      borderWidth="2px"
+    >
       <Box pos="relative">
         <Image
           src={businessImage}
