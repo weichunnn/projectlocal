@@ -53,7 +53,7 @@ export default function MobileNav(props) {
             <Box mt="12" px="4">
               <SearchBar showSearch={true} my="8" />
               <Stack direction="column" spacing="4">
-                <HeaderButtons />
+                <HeaderButtons hideDiscover={true} />
               </Stack>
               <SideNav pos="relative" pt="4" />
             </Box>
