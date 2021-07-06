@@ -52,11 +52,11 @@ export default function SearchBar(props) {
   const { search, onSearch } = useSearch();
   const inputRef = useRef();
   const slashPressed = useKeyPress(['Shift', 'K']);
-  if (slashPressed) {
-    inputRef.current.focus();
-  }
   const showSearchBarRoutes = ['/discover', '/favourites', '/personal'];
   const showSearchBar = showSearchBarRoutes.includes(router.route);
+  if (slashPressed && showSearchBar) {
+    inputRef.current.focus();
+  }
 
   return (
     showSearchBar && (
