@@ -4,7 +4,8 @@ import {
   Kbd,
   InputLeftElement,
   InputRightElement,
-  InputGroup
+  InputGroup,
+  useColorMode
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
@@ -44,6 +45,8 @@ const useKeyPress = (targets) => {
 
 export default function SearchBar(props) {
   const router = useRouter();
+  const { colorMode } = useColorMode();
+  const inputBg = { light: null, dark: 'gray.700' };
 
   const { showSearch, ...others } = props;
   const { search, onSearch } = useSearch();
@@ -66,6 +69,7 @@ export default function SearchBar(props) {
           children={<SearchIcon color="teal.300" boxSize="4" />}
         />
         <Input
+          bg={inputBg[colorMode]}
           type="text"
           placeholder="Search Project Local"
           ref={inputRef}
