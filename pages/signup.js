@@ -20,8 +20,9 @@ import {
   useColorMode
 } from '@chakra-ui/react';
 import { FaGoogle, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 import { useAuth } from '@/lib/auth';
 import Logo from '@/components/Logo';
@@ -35,6 +36,8 @@ const Login = () => {
 
   const { signupwithEmail, signinWithGoogle, loading } = useAuth();
   const [show, setShow] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState(null);
+
   const handleClick = () => setShow(!show);
 
   const toast = useToast();
@@ -46,8 +49,31 @@ const Login = () => {
     formState: { errors }
   } = useForm();
   const watchPassword = watch('password', '');
+  const captchaRef = useRef(null);
+
+  const onHCaptchaChange = (captchaCode) => {
+    if (!captchaCode) {
+      console.log('Denied :(');
+      setCaptchaToken('');
+    } else {
+      console.log('Yay, verified');
+      setCaptchaToken(captchaCode);
+    }
+  };
 
   const onSubmit = (data, e, provider = false) => {
+    if (captchaToken == '') {
+      toast({
+        title: 'Hmmm, are you secretly a robot?',
+        description: 'Please complete the hCaptcha before submitting?',
+        status: 'warning',
+        position: 'top-right',
+        duration: 5000,
+        isClosable: true
+      });
+      return;
+    }
+
     const signupMethod = provider
       ? signinWithGoogle('/discover')
       : signupwithEmail(data.email, data.password, data.name, '/discover');
@@ -72,6 +98,10 @@ const Login = () => {
           duration: 5000,
           isClosable: true
         });
+      })
+      .then(() => {
+        setCaptchaToken('');
+        captchaRef.current.resetCaptcha();
       });
   };
 
@@ -213,6 +243,16 @@ const Login = () => {
                   )}
                 </FormControl>
               </Stack>
+              <Flex align="center" justify="center" my="4">
+                <HCaptcha
+                  id="signup-hcaptcha"
+                  ref={captchaRef}
+                  theme={colorMode}
+                  size="normal"
+                  sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY}
+                  onVerify={onHCaptchaChange}
+                />
+              </Flex>
               <Button
                 colorScheme="teal"
                 isFullWidth
