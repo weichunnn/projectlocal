@@ -47,6 +47,7 @@ import Carousel from '@/components/Carousel';
 import EditableControls from '@/components/EditableControls';
 import FilesUpload from '@/components/FilesUpload';
 import PrivateRouteWrapper from '@/components/PrivateRouteWrapper';
+import SeoWrapper from '@/components/SeoWrapper';
 import { useSearch } from '@/lib/search';
 import Header from '@/components/Header';
 import { createBusiness } from '@/lib/db';
@@ -648,4 +649,10 @@ const AddBusiness = () => {
   );
 };
 
-export default PrivateRouteWrapper(AddBusiness);
+export default function FavouritesPage() {
+  return (
+    <SeoWrapper name="Add A Business" path="/add-business">
+      {PrivateRouteWrapper(AddBusiness)()}
+    </SeoWrapper>
+  );
+}

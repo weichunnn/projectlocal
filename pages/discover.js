@@ -1,13 +1,14 @@
 import { Text, Wrap } from '@chakra-ui/react';
+import useSWR from 'swr';
 
 import App from '@/components/App';
 import BusinessCard from '@/components/BusinessCard';
 import LocationFilterText from '@/components/LocationFilterText';
 import EmptyState from '@/components/EmptyState';
 import LoadingAppState from '@/components/LoadingAppState';
+import SeoWrapper from '@/components/SeoWrapper';
 import { getAllBusinesses } from '@/lib/db-admin';
 import searchLogic from 'utils/searchLogic';
-import useSWR from 'swr';
 import fetcher from '@/utils/fetcher';
 
 export async function getStaticProps(context) {
@@ -20,8 +21,7 @@ export async function getStaticProps(context) {
     revalidate: 3600
   };
 }
-
-export default function Discover({ initialBusinesses }) {
+const Discover = ({ initialBusinesses }) => {
   const { data } = useSWR('/api/businesses', fetcher, {
     initialBusinesses
   });
@@ -60,5 +60,13 @@ export default function Discover({ initialBusinesses }) {
         )}
       </>
     </App>
+  );
+};
+
+export default function DiscoverPage() {
+  return (
+    <SeoWrapper name="Discover" path="/discover">
+      <Discover />
+    </SeoWrapper>
   );
 }
