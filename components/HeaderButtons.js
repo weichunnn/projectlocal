@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useAuth } from '@/lib/auth';
 import { withAuthModal } from './AuthModal';
 
-const HeaderButtons = ({ openAuthModal }) => {
+const HeaderButtons = ({ openAuthModal, hideDiscover }) => {
   const router = useRouter();
   const { user, signout } = useAuth();
   const restrictDiscoverRoutes = ['/discover', '/favourites', '/personal'];
@@ -15,7 +15,7 @@ const HeaderButtons = ({ openAuthModal }) => {
 
   return (
     <>
-      {!restrictDiscoverRoutes.includes(router.route) && (
+      {!restrictDiscoverRoutes.includes(router.route) && !hideDiscover && (
         <NextLink href="/discover" passHref>
           <Button
             as="a"
