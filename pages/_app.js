@@ -1,8 +1,9 @@
 import { ChakraProvider } from '@chakra-ui/react';
+import { MDXProvider } from '@mdx-js/react';
 
-import { AuthProvider } from '../lib/auth';
-import { SearchProvider } from '../lib/search';
-
+import { AuthProvider } from '@/lib/auth';
+import { SearchProvider } from '@/lib/search';
+import MDXComponents from '@/components/MDXComponents';
 import customTheme from '../styles/theme';
 
 function MyApp({ Component, pageProps }) {
@@ -10,7 +11,9 @@ function MyApp({ Component, pageProps }) {
     <ChakraProvider theme={customTheme}>
       <AuthProvider>
         <SearchProvider>
-          <Component {...pageProps} />
+          <MDXProvider components={MDXComponents}>
+            <Component {...pageProps} />
+          </MDXProvider>
         </SearchProvider>
       </AuthProvider>
     </ChakraProvider>
