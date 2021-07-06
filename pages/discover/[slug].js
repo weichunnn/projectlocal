@@ -73,7 +73,7 @@ export async function getStaticPaths(context) {
 
   return {
     paths,
-    fallback: false
+    fallback: true
   };
 }
 
