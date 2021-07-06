@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }) {
     <ChakraProvider theme={customTheme}>
       <AuthProvider>
         <SearchProvider>
-          <MDXProvider component={MDXComponents}>
+          <MDXProvider components={MDXComponents}>
             <DefaultSeo {...SEO} />
             <Component {...pageProps} />
           </MDXProvider>
