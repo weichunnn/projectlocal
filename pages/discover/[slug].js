@@ -15,7 +15,10 @@ import {
   Textarea,
   Wrap,
   Link,
-  useBreakpointValue
+  Center,
+  Spinner,
+  useBreakpointValue,
+  useColorMode
 } from '@chakra-ui/react';
 import {
   FaHeart,
@@ -78,6 +81,19 @@ export async function getStaticPaths(context) {
 }
 
 const Business = ({ openAuthModal, business, initialReviews }) => {
+  const { colorMode } = useColorMode();
+  const bg = { light: 'gray.100', dark: 'gray.800' };
+
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return (
+      <Center h="100vh" bg={bg[colorMode]} overflow="auto">
+        <Spinner size="xl" speed="0.5s" />
+      </Center>
+    );
+  }
+
   const { user } = useAuth();
   const {
     name,
@@ -93,7 +109,6 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
     whatsappLink
   } = business;
 
-  const router = useRouter();
   const { slug } = router.query;
   const { data: reviewsData } = useSWR(`/api/reviews/${slug}`, fetcher, {
     initialReviews
