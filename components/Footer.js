@@ -1,4 +1,4 @@
-import { Stack, Link, useColorMode } from '@chakra-ui/react';
+import { Stack, Link, Text, useColorMode } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
 export default function Footer(props) {
@@ -19,6 +19,8 @@ export default function Footer(props) {
       borderTopWidth="1px"
       {...props}
     >
+      <Text>Made with ☕️ and ❤️ in Kuala Lumpur</Text>
+
       <NextLink href="/privacy" passHref>
         <Link fontSize="md" fontWeight="medium">
           Privacy

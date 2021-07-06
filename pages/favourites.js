@@ -7,6 +7,7 @@ import LocationFilterText from '@/components/LocationFilterText';
 import EmptyState from '@/components/EmptyState';
 import LoadingAppState from '@/components/LoadingAppState';
 import PrivateRouteWrapper from '@/components/PrivateRouteWrapper';
+import SeoWrapper from '@/components/SeoWrapper';
 import App from '@/components/App';
 import searchLogic from '@/utils/searchLogic';
 import fetcher from '@/utils/fetcher';
@@ -66,4 +67,10 @@ const Favourites = () => {
   );
 };
 
-export default PrivateRouteWrapper(Favourites);
+export default function FavouritesPage() {
+  return (
+    <SeoWrapper name="Favourites" path="/favourites">
+      {PrivateRouteWrapper(Favourites)()}
+    </SeoWrapper>
+  );
+}

@@ -25,9 +25,10 @@ import { useForm } from 'react-hook-form';
 
 import { useAuth } from '@/lib/auth';
 import Logo from '@/components/Logo';
+import SeoWrapper from '@/components/SeoWrapper';
 import NextLink from 'next/link';
 
-export default function Login() {
+const Login = () => {
   const { colorMode } = useColorMode();
   const bg = { light: 'gray.100', dark: 'gray.800' };
   const inputBg = { light: 'white', dark: 'gray.700' };
@@ -225,5 +226,13 @@ export default function Login() {
         </Flex>
       </Flex>
     </Box>
+  );
+};
+
+export default function PersonalPage() {
+  return (
+    <SeoWrapper name="Login" path="/login">
+      <Login />
+    </SeoWrapper>
   );
 }

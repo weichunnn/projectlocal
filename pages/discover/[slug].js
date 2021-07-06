@@ -46,6 +46,7 @@ import {
 } from '@/lib/db';
 import { getAllBusinesses, getAllReviews, getBusiness } from '@/lib/db-admin';
 import fetcher from '@/utils/fetcher';
+import SeoWrapper from '@/components/SeoWrapper';
 
 export async function getStaticProps(context) {
   const businessId = context.params.slug;
@@ -204,7 +205,7 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
   };
 
   return (
-    <>
+    <SeoWrapper name={name} path={`/discover/${slug}`}>
       <Header />
       <Box pt="75px">
         <Box px={['8', null, '24']} py="8">
@@ -416,7 +417,7 @@ const Business = ({ openAuthModal, business, initialReviews }) => {
           </Flex>
         </Box>
       </Box>
-    </>
+    </SeoWrapper>
   );
 };
 

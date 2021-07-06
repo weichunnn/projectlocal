@@ -7,6 +7,7 @@ import EmptyState from '@/components/EmptyState';
 import EmptyPersonalBusiness from '@/components/EmptyPersonalBusiness';
 import LoadingAppState from '@/components/LoadingAppState';
 import PrivateRouteWrapper from '@/components/PrivateRouteWrapper';
+import SeoWrapper from '@/components/SeoWrapper';
 import BusinessCard from '@/components/BusinessCard';
 import fetcher from '@/utils/fetcher';
 import { useAuth } from '@/lib/auth';
@@ -61,4 +62,10 @@ const Personal = () => {
   );
 };
 
-export default PrivateRouteWrapper(Personal);
+export default function PersonalPage() {
+  return (
+    <SeoWrapper name="Personal" path="/personal">
+      {PrivateRouteWrapper(Personal)()}
+    </SeoWrapper>
+  );
+}

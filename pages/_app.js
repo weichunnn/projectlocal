@@ -6,12 +6,18 @@ import { SearchProvider } from '@/lib/search';
 import MDXComponents from '@/components/MDXComponents';
 import customTheme from '../styles/theme';
 
+import { DefaultSeo } from 'next-seo';
+import SEO from '../next-seo.config';
+import { useAnalytics } from '@/lib/analytics';
+
 function MyApp({ Component, pageProps }) {
+  useAnalytics();
   return (
     <ChakraProvider theme={customTheme}>
       <AuthProvider>
         <SearchProvider>
-          <MDXProvider components={MDXComponents}>
+          <MDXProvider component={MDXComponents}>
+            <DefaultSeo {...SEO} />
             <Component {...pageProps} />
           </MDXProvider>
         </SearchProvider>
