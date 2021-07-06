@@ -4,12 +4,16 @@ import {
   Text,
   Select,
   Checkbox,
-  CheckboxGroup
+  CheckboxGroup,
+  useColorMode
 } from '@chakra-ui/react';
 
 import { useSearch } from '@/lib/search';
 
 export default function Filters(props) {
+  const { colorMode } = useColorMode();
+  const inputBg = { light: null, dark: 'gray.700' };
+
   const {
     location,
     categories,
@@ -27,6 +31,7 @@ export default function Filters(props) {
           Location
         </Text>
         <Select
+          bg={inputBg[colorMode]}
           isFullWidth={true}
           defaultValue={location}
           onChange={onChangeLocation}

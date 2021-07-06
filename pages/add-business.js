@@ -23,7 +23,8 @@ import {
   FormErrorMessage,
   Select,
   useToast,
-  useBreakpointValue
+  useBreakpointValue,
+  useColorMode
 } from '@chakra-ui/react';
 import ReactSelect from 'react-select';
 
@@ -59,6 +60,9 @@ const DEFAULT_STORY =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id eu nisl nunc mi ipsum faucibus vitae aliquet. Gravida arcu ac tortor dignissim convallis aenean. Facilisis leo vel fringilla est ullamcorper eget nulla facilisi. Et magnis dis parturient montes. In nisl nisi scelerisque eu ultrices vitae auctor eu. Adipiscing elit pellentesque habitant morbi tristique senectus. Facilisi nullam vehicula ipsum a arcu cursus. A diam sollicitudin tempor id eu nisl nunc mi. Ut morbi tincidunt augue interdum velit euismod. Euismod lacinia at quis risus sed vulputate odio ut. Odio aenean sed adipiscing diam donec adipiscing tristique. Sit amet justo donec enim diam vulputate ut pharetra sit.\n\nUt venenatis tellus in metus vulputate eu scelerisque. Viverra mauris in aliquam sem fringilla. Egestas tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla. Quam viverra orci sagittis eu volutpat odio facilisis. Lectus vestibulum mattis ullamcorper velit sed ullamcorper. In ante metus dictum at tempor commodo ullamcorper a lacus. Varius vel pharetra vel turpis nunc eget lorem. Egestas integer eget aliquet nibh praesent. Eget egestas purus viverra accumsan in nisl nisi scelerisque. Nibh tellus molestie nunc non blandit massa enim nec dui. Nisl suscipit adipiscing bibendum est ultricies. Fringilla ut morbi tincidunt augue interdum velit euismod. Tempus urna et pharetra pharetra massa massa. Donec ac odio tempor orci dapibus ultrices in iaculis nunc. Massa eget egestas purus viverra accumsan in. At varius vel pharetra vel turpis nunc eget lorem. In vitae turpis massa sed elementum. Malesuada fames ac turpis egestas. At quis risus sed vulputate odio ut enim blandit. Eleifend mi in nulla posuere sollicitudin aliquam ultrices.\n\nId cursus metus aliquam eleifend. Sagittis vitae et leo duis. Pellentesque habitant morbi tristique senectus et netus et malesuada. Adipiscing vitae proin sagittis nisl rhoncus mattis. Morbi tincidunt ornare massa eget egestas. Nunc sed id semper risus in hendrerit. Lacus luctus accumsan tortor posuere ac. Commodo quis imperdiet massa tincidunt nunc pulvinar sapien. Id faucibus nisl tincidunt eget nullam non nisi est. A condimentum vitae sapien pellentesque habitant morbi tristique senectus. Consectetur a erat nam at lectus.\n\nSem nulla pharetra diam sit amet nisl suscipit. Et pharetra pharetra massa massa ultricies mi quis hendrerit dolor. At varius vel pharetra vel turpis. Mattis molestie a iaculis at erat. Ullamcorper sit amet risus nullam eget felis eget nunc lobortis. Fringilla phasellus faucibus scelerisque eleifend donec. Habitant morbi tristique senectus et netus et. Magna ac placerat vestibulum lectus mauris ultrices eros in cursus. Morbi tempus iaculis urna id volutpat lacus. Dolor sit amet consectetur adipiscing elit duis tristique. Vulputate odio ut enim blandit. Erat velit scelerisque in dictum non consectetur. Nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant Etiam.';
 
 const AddBusiness = () => {
+  const { colorMode } = useColorMode();
+  const inputBg = { light: null, dark: 'gray.700' };
+
   const toast = useToast();
   const router = useRouter();
 
@@ -71,7 +75,7 @@ const AddBusiness = () => {
     control,
     reset
   } = useForm();
-  const customStyles = ReactSelectStyles(errors);
+  const customStyles = ReactSelectStyles(errors, colorMode);
 
   var saveState = false;
   const [loading, setLoading] = useState(false);
@@ -297,7 +301,7 @@ const AddBusiness = () => {
                         placeholder="Carpe Diem"
                         fontWeight="bold"
                         fontSize={['xl', null, '3xl']}
-                        color="gray.500"
+                        color={colorMode == 'light' ? 'gray.500' : 'white'}
                         isPreviewFocusable={false}
                       >
                         <Stack
@@ -306,7 +310,7 @@ const AddBusiness = () => {
                         >
                           <Flex align="center">
                             <EditablePreview px="4" />
-                            <EditableInput px="4" />
+                            <EditableInput px="4" bg={inputBg[colorMode]} />
                             <EditableControls />
                           </Flex>
                           {errors.name && (
@@ -383,6 +387,7 @@ const AddBusiness = () => {
                       Short Description
                     </Text>
                     <Input
+                      bg={inputBg[colorMode]}
                       placeholder="Project Local aims to bring the community together in supporting local businesses"
                       {...register('shortDesc', {
                         required: 'Short Description is required.',
@@ -442,6 +447,7 @@ const AddBusiness = () => {
                       Our Beginning and Story
                     </Heading>
                     <Textarea
+                      bg={inputBg[colorMode]}
                       placeholder={DEFAULT_STORY}
                       rows="25"
                       {...register('story', {
@@ -477,9 +483,15 @@ const AddBusiness = () => {
                     </Text>
                     <InputGroup>
                       <InputLeftElement
-                        children={<Icon color="green" as={FaGlobeAsia} />}
+                        children={
+                          <Icon
+                            color={colorMode == 'light' ? 'green' : '#39FE15'}
+                            as={FaGlobeAsia}
+                          />
+                        }
                       />
                       <Input
+                        bg={inputBg[colorMode]}
                         placeholder="https://www.projectlocal.vercel.app"
                         {...register('primaryLink')}
                       />
@@ -497,6 +509,7 @@ const AddBusiness = () => {
                         <FormControl isInvalid={errors.location}>
                           <Text mb="2">Location</Text>
                           <Select
+                            bg={inputBg[colorMode]}
                             placeholder="Select a Location"
                             isFullWidth
                             {...register('location', {
@@ -521,6 +534,7 @@ const AddBusiness = () => {
                       <Box>
                         <Text mb="2">Address</Text>
                         <Textarea
+                          bg={inputBg[colorMode]}
                           placeholder="No. 21, Jalan Projek Lokal, Taman Lokal, 532049 Kuala Lumpur"
                           {...register('address', {
                             maxLength: 125
@@ -534,6 +548,7 @@ const AddBusiness = () => {
                             children={<Icon as={FaPhoneAlt} />}
                           />
                           <Input
+                            bg={inputBg[colorMode]}
                             placeholder="+6012-28282828"
                             {...register('contactNumber')}
                           />
@@ -545,10 +560,16 @@ const AddBusiness = () => {
                           <InputGroup>
                             <InputLeftElement
                               children={
-                                <Icon color="#3b5998" as={FaFacebookF} />
+                                <Icon
+                                  color={
+                                    colorMode == 'light' ? '#3b5998' : '#0185F5'
+                                  }
+                                  as={FaFacebookF}
+                                />
                               }
                             />
                             <Input
+                              bg={inputBg[colorMode]}
                               placeholder="https://www.facebook.com"
                               {...register('facebookLink')}
                             />
@@ -560,6 +581,7 @@ const AddBusiness = () => {
                               }
                             />
                             <Input
+                              bg={inputBg[colorMode]}
                               placeholder="Click to Chat Link"
                               {...register('whatsappLink')}
                             />
@@ -569,6 +591,7 @@ const AddBusiness = () => {
                               children={<Icon as={FaInstagram} />}
                             />
                             <Input
+                              bg={inputBg[colorMode]}
                               placeholder="https://www.instagram.com"
                               {...register('instagramLink')}
                             />
@@ -580,6 +603,7 @@ const AddBusiness = () => {
                               }
                             />
                             <Input
+                              bg={inputBg[colorMode]}
                               placeholder="https://www.linkedin.com"
                               {...register('linkedinLink')}
                             />

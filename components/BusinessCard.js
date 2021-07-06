@@ -8,7 +8,7 @@ import {
   Wrap,
   Flex,
   useToast,
-  Spinner
+  useColorMode
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import DeleteBusinessButton from './DeleteBusinessButton';
@@ -31,6 +31,7 @@ export default function BusinessCard({
   status,
   editable
 }) {
+  const { colorMode } = useColorMode();
   const toast = useToast();
   const handleClick = () => {
     if (!toast.isActive('pending-toast')) {
@@ -46,7 +47,13 @@ export default function BusinessCard({
     }
   };
   return (
-    <LinkBox maxW="xs" boxShadow="xl" borderRadius="xl" overflow="hidden">
+    <LinkBox
+      maxW="xs"
+      boxShadow="xl"
+      borderRadius="xl"
+      overflow="hidden"
+      borderWidth="2px"
+    >
       <Box pos="relative">
         <Image
           src={businessImage}
@@ -67,9 +74,11 @@ export default function BusinessCard({
             align="center"
             justify="space-between"
           >
-            <Badge px="2" colorScheme={badgeColors[status]}>
-              {status}
-            </Badge>
+            <Flex rounded="sm" bg={colorMode == 'dark' && 'gray.700'}>
+              <Badge px="2" colorScheme={badgeColors[status]}>
+                {status}
+              </Badge>
+            </Flex>
             <DeleteBusinessButton businessId={id} status={status} />
           </Flex>
         )}

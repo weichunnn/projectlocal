@@ -13,7 +13,7 @@ const HeaderButtons = ({ openAuthModal }) => {
   const variant = useBreakpointValue({ base: 'outline', md: 'ghost' });
   const colorScheme = useBreakpointValue({ base: 'teal', md: 'black' });
 
-  return user ? (
+  return (
     <>
       {!restrictDiscoverRoutes.includes(router.route) && (
         <NextLink href="/discover" passHref>
@@ -27,36 +27,46 @@ const HeaderButtons = ({ openAuthModal }) => {
           </Button>
         </NextLink>
       )}
-      <NextLink href="/add-business" passHref>
-        <Button as="a" colorScheme={colorScheme} variant={variant} px={[2, 4]}>
-          Add a business
-        </Button>
-      </NextLink>
-      <Button
-        colorScheme={colorScheme}
-        variant={variant}
-        px={[2, 4]}
-        onClick={() => signout()}
-      >
-        Sign Out
-      </Button>
-    </>
-  ) : (
-    <>
-      <Button
-        as="a"
-        variant={variant}
-        colorScheme={colorScheme}
-        px={[2, 4]}
-        onClick={openAuthModal}
-      >
-        Sign In
-      </Button>
-      <NextLink href="/signup" passHref>
-        <Button as="a" variant="solid" colorScheme="teal" px={[2, 4]}>
-          Sign Up
-        </Button>
-      </NextLink>
+      {user ? (
+        <>
+          {router.route != '/add-business' && (
+            <NextLink href="/add-business" passHref>
+              <Button
+                as="a"
+                colorScheme={colorScheme}
+                variant={variant}
+                px={[2, 4]}
+              >
+                Add a business
+              </Button>
+            </NextLink>
+          )}
+          <Button
+            colorScheme={colorScheme}
+            variant={variant}
+            px={[2, 4]}
+            onClick={() => signout()}
+          >
+            Sign Out
+          </Button>
+        </>
+      ) : (
+        <>
+          <Button
+            variant={variant}
+            colorScheme={colorScheme}
+            px={[2, 4]}
+            onClick={openAuthModal}
+          >
+            Sign In
+          </Button>
+          <NextLink href="/signup" passHref>
+            <Button as="a" variant="solid" colorScheme="teal" px={[2, 4]}>
+              Sign Up
+            </Button>
+          </NextLink>
+        </>
+      )}
     </>
   );
 };
