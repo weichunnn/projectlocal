@@ -26,7 +26,7 @@ import {
   useBreakpointValue,
   useColorMode
 } from '@chakra-ui/react';
-import ReactSelect from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 
 import { useState, useEffect } from 'react';
 import {
@@ -421,7 +421,7 @@ const AddBusiness = () => {
                           'Please specify the category or categories of your business.'
                       }}
                       render={({ field }) => (
-                        <ReactSelect
+                        <CreatableSelect
                           {...field}
                           instanceId="_"
                           styles={customStyles}
@@ -429,7 +429,7 @@ const AddBusiness = () => {
                           isClearable
                           isMulti
                           noOptionsMessage={() =>
-                            "Can't find your categories? Shoot us an email to get it added ! "
+                            "Can't find your categories? Create it instead or contact us to get it added !"
                           }
                           options={customCategories.map((category) => {
                             return { value: category, label: category };
