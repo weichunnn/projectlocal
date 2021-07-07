@@ -14,7 +14,7 @@ import NextLink from 'next/link';
 import DeleteBusinessButton from './DeleteBusinessButton';
 
 const badgeColors = {
-  'Food & Beverage': 'teal',
+  'Food & Beverage': 'blue',
   'Health & Beauty': 'red',
   Education: 'orange',
   active: 'green',
@@ -86,7 +86,11 @@ export default function BusinessCard({
       <Box py="6" px="4">
         <Wrap direction="row" spacing="2" h="50px">
           {categories.map((category) => (
-            <Badge key={category} px="2" colorScheme={badgeColors[category]}>
+            <Badge
+              key={category}
+              px="2"
+              colorScheme={badgeColors[category] ?? 'teal'}
+            >
               {category}
             </Badge>
           ))}
