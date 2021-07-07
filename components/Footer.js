@@ -1,4 +1,4 @@
-import { Stack, Link, Text, useColorMode } from '@chakra-ui/react';
+import { Flex, Stack, Link, Text, useColorMode } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
 export default function Footer(props) {
@@ -6,10 +6,9 @@ export default function Footer(props) {
   const bg = { light: 'white', dark: 'gray.800' };
 
   return (
-    <Stack
+    <Flex
       bg={bg[colorMode]}
       direction="row"
-      spacing="12"
       bottom="0"
       w="full"
       minH="75px"
@@ -19,10 +18,11 @@ export default function Footer(props) {
       borderTopWidth="1px"
       {...props}
     >
-      <Text>Made with ☕️ and ❤️ in Kuala Lumpur</Text>
-
+      <Text display={['none', null, 'block']} mr="12">
+        Made with ☕️ and ❤️ in Kuala Lumpur
+      </Text>
       <NextLink href="/privacy" passHref>
-        <Link fontSize="md" fontWeight="medium">
+        <Link fontSize="md" fontWeight="medium" mr="12">
           Privacy
         </Link>
       </NextLink>
@@ -31,6 +31,6 @@ export default function Footer(props) {
           Terms
         </Link>
       </NextLink>
-    </Stack>
+    </Flex>
   );
 }

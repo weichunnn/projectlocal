@@ -46,7 +46,7 @@ export const AuthModal = ({ isOpen, onClose, onSubmit }) => {
         <ModalBody>
           <Stack direction="column" px="10" py="6">
             <Center mb="4">
-              <Logo boxSize="24" />
+              <Logo boxSize={['16', '24']} />
             </Center>
             <Button
               isFullWidth

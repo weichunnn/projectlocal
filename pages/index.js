@@ -22,7 +22,7 @@ export default function Home() {
           maxW="750px"
           align="center"
           textAlign="center"
-          px="8"
+          p="8"
         >
           <Logo boxSize="20" mb="4" />
           <Heading as="h1" fontWeight="bold" mb="8">
